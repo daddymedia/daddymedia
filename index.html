@@ -6,13 +6,10 @@
     <title>Daddy Media | Jobs, Internships & Community</title>
     <meta name="description" content="Discover jobs, internships, communities, career resources, and networking opportunities.">
     
-    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS (CDN for instant styling) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Custom Tailwind Configuration -->
     <script>
         tailwind.config = {
             theme: {
@@ -31,25 +28,20 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
 
-    <!-- Navigation -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
                 <a href="index.html" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-primary transition">
-                    <!-- Replace src with your actual logo -->
                     <img src="DaddyMediaLogo.png" alt="Daddy Media Logo" class="h-8 w-8 object-cover rounded" onerror="this.style.display='none'">
                     Daddy Media
                 </a>
                 
-                <!-- Desktop Nav -->
                 <nav class="hidden md:flex space-x-8">
                     <a href="jobs.html" class="text-gray-600 hover:text-primary font-medium transition">Jobs</a>
                     <a href="internships.html" class="text-gray-600 hover:text-primary font-medium transition">Internships</a>
                     <a href="community.html" class="text-gray-600 hover:text-primary font-medium transition">Community</a>
                 </nav>
 
-                <!-- Auth Buttons -->
                 <div class="flex items-center" id="auth-container">
                     <button disabled class="bg-gray-100 text-gray-400 px-4 py-2 rounded-md text-sm font-medium animate-pulse">Loading...</button>
                 </div>
@@ -57,27 +49,23 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-primary to-indigo-700 py-20 text-white">
+    <section class="bg-gradient-to-r from-primary to-indigo-700 py-20 text-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Launch Your Career with Daddy Media</h1>
             <p class="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">Discover high-quality jobs, specialized internships, and connect with a thriving network of professionals and peers.</p>
             
-            <!-- Search Bar -->
-            <div class="max-w-3xl mx-auto bg-white rounded-full p-2 flex shadow-lg">
-                <input type="text" id="global-search" placeholder="Search for positions, skills, or companies..." 
-                       class="flex-grow px-4 py-2 rounded-l-full focus:outline-none text-gray-900 placeholder-gray-400">
-                <button id="hero-search-btn" class="bg-primary hover:bg-secondary text-white px-8 py-3 rounded-full font-medium transition duration-200 ease-in-out">
+            <div class="max-w-3xl mx-auto bg-white rounded-full p-1.5 sm:p-2 flex shadow-lg w-full">
+                <input type="text" id="global-search" placeholder="Search jobs, skills, or companies..." 
+                       class="flex-grow px-3 sm:px-4 py-2 focus:outline-none text-gray-900 placeholder-gray-400 bg-transparent min-w-0 text-sm sm:text-base">
+                <button id="hero-search-btn" class="bg-primary hover:bg-secondary text-white px-5 py-2 sm:px-8 sm:py-3 rounded-full font-medium transition duration-200 ease-in-out flex-shrink-0 text-sm sm:text-base">
                     Search
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         
-        <!-- Featured Jobs -->
         <section class="mb-16">
             <div class="flex justify-between items-end mb-6">
                 <h2 class="text-3xl font-bold text-gray-900">Featured Job Opportunities</h2>
@@ -85,7 +73,6 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="featured-jobs-container">
-                <!-- Skeleton Loading State -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 animate-pulse">
                     <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
                     <div class="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
@@ -99,7 +86,6 @@
             </div>
         </section>
 
-        <!-- Featured Internships -->
         <section>
             <div class="flex justify-between items-end mb-6">
                 <h2 class="text-3xl font-bold text-gray-900">Featured Internships</h2>
@@ -107,7 +93,6 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="featured-internships-container">
-                <!-- Skeleton Loading State -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 animate-pulse">
                     <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
                     <div class="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
@@ -122,7 +107,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gray-900 text-gray-300 py-12 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
@@ -149,7 +133,6 @@
         </div>
     </footer>
 
-    <!-- Firebase Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
