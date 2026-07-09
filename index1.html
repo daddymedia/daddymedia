@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daddy Media | Jobs, Internships & Community</title>
+    <meta name="description" content="Discover jobs, internships, and networking opportunities for students, freshers, and professionals.">
+    <!-- SEO & Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Daddy Media</a>
+            <nav class="nav-links">
+                <a href="jobs.html">Jobs</a>
+                <a href="internships.html">Internships</a>
+                <a href="community.html">Community</a>
+            </nav>
+            <div class="auth-buttons" id="auth-container">
+                <button id="login-btn" class="btn btn-outline">Login</button>
+                <button id="signup-btn" class="btn btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Launch Your Career with Daddy Media</h1>
+            <p>Find the best jobs, internships, and connect with a thriving community of professionals and students.</p>
+            <div class="search-bar">
+                <input type="text" id="global-search" placeholder="Search for jobs, skills, or companies...">
+                <button class="btn btn-primary" onclick="performSearch()">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Jobs Section -->
+    <section class="featured-section">
+        <div class="container">
+            <h2>Featured Jobs</h2>
+            <div class="grid" id="featured-jobs-container">
+                <!-- Dynamically populated by JS -->
+                <p class="loading-text">Loading jobs...</p>
+            </div>
+            <a href="jobs.html" class="btn btn-outline view-all">View All Jobs</a>
+        </div>
+    </section>
+
+    <!-- Trending Communities -->
+    <section class="community-section bg-light">
+        <div class="container">
+            <h2>Trending Communities</h2>
+            <div class="grid" id="trending-communities-container">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <h3>Daddy Media</h3>
+                <p>Empowering the next generation of professionals.</p>
+            </div>
+            <div class="footer-links">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="faq.html">FAQ</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Daddy Media. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs (Modular) -->
+    <script type="module" src="js/firebase-init.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
