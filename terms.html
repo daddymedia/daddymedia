@@ -4,23 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms Framework | Daddy Media</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Daddy Media Terms of Service Structural Framework Agreement.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#1e40af', // Blue-800
+                        dark: '#111827', // Gray-900
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">Daddy Media Terms Node</a>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-primary transition">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Daddy Media <span class="text-primary hidden sm:inline text-sm mt-1 ml-1">Terms Node</span>
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="jobs.html" class="text-gray-600 hover:text-primary font-medium transition">Jobs</a>
+                    <a href="internships.html" class="text-gray-600 hover:text-primary font-medium transition">Internships</a>
+                    <a href="community.html" class="text-gray-600 hover:text-primary font-medium transition">Community</a>
+                </nav>
+
+                <div class="flex items-center">
+                    <a href="index.html" class="text-sm font-medium text-gray-500 hover:text-primary transition">&larr; Main Portal</a>
+                </div>
+            </div>
         </div>
     </header>
-    <main class="container mt-4" style="max-width:800px;">
-        <div class="card">
-            <h1>Terms of Service Structural Framework Agreement</h1>
-            <p class="text-muted">Systems Revision Reference Horizon: July 2026</p>
-            <h2 class="mt-4">1. Database Use Vectors</h2>
-            <p>Users are explicitly prohibited from configuring automated scrape loops against target platform API slots, protecting computing cycles on our server cluster tier.</p>
-            <h2 class="mt-2">2. Security Responsibility</h2>
-            <p>Account verification integrity remains tied directly to the structural handling of private credentials on client terminals.</p>
+
+    <main class="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        
+        <article class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
+            
+            <header class="border-b border-gray-100 pb-8 mb-8 text-center md:text-left">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-3">Terms of Service Structural Framework Agreement</h1>
+                <div class="inline-flex items-center gap-2 bg-gray-50 text-gray-600 px-4 py-2 rounded-full text-sm font-medium border border-gray-200">
+                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Systems Revision Reference Horizon: <span class="text-gray-900">July 2026</span>
+                </div>
+            </header>
+
+            <div class="space-y-8 text-gray-700 leading-relaxed">
+                
+                <section>
+                    <h2 class="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        <span class="bg-blue-50 text-primary w-8 h-8 rounded flex items-center justify-center text-sm">1</span>
+                        Database Use Vectors
+                    </h2>
+                    <p class="pl-10 text-gray-600">
+                        Users are explicitly prohibited from configuring automated scrape loops against target platform API slots, protecting computing cycles on our server cluster tier. Unauthorized bandwidth extraction will result in immediate termination of the node connection.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        <span class="bg-blue-50 text-primary w-8 h-8 rounded flex items-center justify-center text-sm">2</span>
+                        Security Responsibility
+                    </h2>
+                    <p class="pl-10 text-gray-600">
+                        Account verification integrity remains tied directly to the structural handling of private credentials on client terminals. Daddy Media assumes no liability for local token extraction, phishing instances, or compromised client-side storage structures.
+                    </p>
+                </section>
+
+            </div>
+            
+        </article>
+        
+        <div class="mt-8 flex justify-center gap-4">
+            <button onclick="window.print()" class="text-sm text-gray-500 hover:text-primary font-medium flex items-center gap-1 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                Print Blueprint
+            </button>
         </div>
+
     </main>
+
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold text-white mb-4">Daddy Media</h3>
+                    <p class="max-w-md text-gray-400 leading-relaxed text-sm">
+                        Empowering students, freshers, and professionals through continuous growth and unified job placement ecosystems.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <div class="flex flex-col space-y-2 text-sm">
+                        <a href="about.html" class="hover:text-white transition">About Us</a>
+                        <a href="contact.html" class="hover:text-white transition">Contact</a>
+                        <a href="faq.html" class="hover:text-white transition">FAQ</a>
+                        <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                        <a href="terms.html" class="text-white transition">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+                <p class="text-gray-500">&copy; 2026 Daddy Media. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
