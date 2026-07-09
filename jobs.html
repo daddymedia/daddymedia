@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Jobs | Daddy Media</title>
+    <title>Explore Jobs | Daddy Media</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -15,58 +15,117 @@
                 <a href="internships.html">Internships</a>
                 <a href="community.html">Community</a>
             </nav>
-            <div class="auth-buttons" id="auth-container">
-                <!-- Auth state managed by JS -->
-            </div>
+            <div class="auth-buttons" id="auth-container"></div>
         </div>
     </header>
 
     <main class="directory-layout container">
-        <!-- Sidebar Filters -->
         <aside class="filters">
-            <h3>Filters</h3>
+            <h3>Refine Parameters</h3>
             <div class="filter-group">
-                <label>Job Type</label>
-                <select id="filter-type">
-                    <option value="all">All Types</option>
-                    <option value="full-time">Full Time</option>
-                    <option value="part-time">Part Time</option>
-                    <option value="remote">Remote</option>
-                </select>
+                <label for="filter-category">Job Vertical</label>
+                <input type="text" id="filter-category" placeholder="Engineering, Design, Finance...">
             </div>
-            <div class="filter-group">
-                <label>Category</label>
-                <input type="text" id="filter-category" placeholder="e.g., Engineering, Design">
-            </div>
-            <button class="btn btn-primary w-100" id="apply-filters">Apply Filters</button>
+            <button class="btn btn-primary w-100" id="filter-trigger-btn">Execute Filter Sequence</button>
         </aside>
 
-        <!-- Listings -->
         <section class="listings">
             <div class="listings-header">
-                <h1>Explore Opportunities</h1>
-                <span id="results-count">Showing results...</span>
+                <h1>Available Job Openings</h1>
             </div>
-            <div class="jobs-list" id="jobs-list-container">
-                <!-- Dynamically populated by JS -->
-                <div class="loader">Loading...</div>
-            </div>
-            
-            <!-- Pagination -->
-            <div class="pagination" id="pagination-controls">
-                <button class="btn btn-outline" id="prev-page" disabled>Previous</button>
-                <button class="btn btn-outline" id="next-page">Next</button>
+            <div class="jobs-list" id="jobs-stream-target">
+                <p class="text-muted">Parsing distributed listing collections...</p>
             </div>
         </section>
     </main>
 
-    <footer>
-        <div class="container text-center">
-            <p>&copy; 2026 Daddy Media. All rights reserved.</p>
-        </div>
-    </footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/jobs.js"></script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBn3w0R0qx8IA2MeAZETBxKBP02IqIVz8",
+            authDomain: "daddy-media.firebaseapp.com",
+            projectId: "daddy-media",
+            storageBucket: "daddy-media.firebasestorage.app",
+            messagingSenderId: "13022563374",
+            appId: "1:13022563374:web:1123e9bec9d49d192823bf",
+            measurementId: "G-LWX8MJ7SW5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let currentActiveUser = null;
+
+        onAuthStateChanged(auth, (user) => {
+            currentActiveUser = user;
+            const container = document.getElementById('auth-container');
+            if(user) {
+                container.innerHTML = `<a href="profile.html" class="btn btn-outline">Profile Hub</a>`;
+            } else {
+                container.innerHTML = `<a href="index.html" class="btn btn-primary">Login at Main Node</a>`;
+            }
+            renderJobsMap();
+        });
+
+        async function renderJobsMap(filterCategory = '') {
+            const target = document.getElementById('jobs-stream-target');
+            try {
+                let queryRef = collection(db, "jobs");
+                if (filterCategory) {
+                    queryRef = query(collection(db, "jobs"), where("category", "==", filterCategory));
+                }
+                const snap = await getDocs(queryRef);
+                if (snap.empty) {
+                    target.innerHTML = '<p class="text-muted">No database entries matched query variables.</p>';
+                    return;
+                }
+                target.innerHTML = '';
+                snap.forEach((documentNode) => {
+                    const data = documentNode.data();
+                    const id = documentNode.id;
+                    const card = document.createElement('div');
+                    card.className = 'card mt-2';
+                    card.innerHTML = `
+                        <h3>${data.title}</h3>
+                        <p class="text-muted"><strong>${data.company}</strong> | Location Matrix: ${data.location}</p>
+                        <p>Compensation Mapping Scale: $${data.salary || 'Unspecified'}</p>
+                        <div class="auth-action-zone mt-2" id="action-zone-${id}"></div>
+                    `;
+                    target.appendChild(card);
+
+                    const actionZone = document.getElementById(`action-zone-${id}`);
+                    if (currentActiveUser) {
+                        const applyBtn = document.createElement('button');
+                        applyBtn.className = 'btn btn-primary';
+                        applyBtn.innerText = 'Transmit Application';
+                        applyBtn.addEventListener('click', async () => {
+                            await addDoc(collection(db, "applications"), {
+                                applicantId: currentActiveUser.uid,
+                                jobId: id,
+                                position: data.title,
+                                company: data.company,
+                                status: "Pending Technical Screening",
+                                timestamp: new Date()
+                            });
+                            alert('Application successfully appended to database pipelines.');
+                        });
+                        actionZone.appendChild(applyBtn);
+                    } else {
+                        actionZone.innerHTML = '<span class="text-muted" style="font-size:0.9rem;">Authentication status required for application dispatch mechanisms.</span>';
+                    }
+                });
+            } catch (err) {
+                target.innerHTML = `<p class="text-danger">Query validation failure: ${err.message}</p>`;
+            }
+        }
+
+        document.getElementById('filter-trigger-btn').addEventListener('click', () => {
+            const val = document.getElementById('filter-category').value.trim();
+            renderJobsMap(val);
+        });
+    </script>
 </body>
 </html>
