@@ -4,44 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore Internships | Daddy Media</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Discover and apply for high-quality apprenticeships and internships.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#1e40af', // Blue-800
+                        dark: '#111827', // Gray-900
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">Daddy Media</a>
-            <nav class="nav-links">
-                <a href="jobs.html">Jobs</a>
-                <a href="internships.html" class="active">Internships</a>
-                <a href="community.html">Community</a>
-            </nav>
-            <div class="auth-buttons" id="auth-container"></div>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-primary transition">
+                    <img src="DaddyMediaLogo.png" alt="Daddy Media Logo" class="h-8 w-8 object-cover rounded" onerror="this.style.display='none'">
+                    Daddy Media
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="jobs.html" class="text-gray-600 hover:text-primary font-medium transition">Jobs</a>
+                    <a href="internships.html" class="text-primary border-b-2 border-primary font-medium transition">Internships</a>
+                    <a href="community.html" class="text-gray-600 hover:text-primary font-medium transition">Community</a>
+                </nav>
+
+                <div class="flex items-center" id="auth-container">
+                    <button disabled class="bg-gray-100 text-gray-400 px-4 py-2 rounded-md text-sm font-medium animate-pulse">Loading...</button>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="directory-layout container">
-        <aside class="filters">
-            <h3>Compensation Filters</h3>
-            <div class="filter-group">
-                <label for="filter-stipend">Stipend Status</label>
-                <select id="filter-stipend">
-                    <option value="all">All Structures</option>
-                    <option value="paid">Paid Tracks</option>
-                    <option value="unpaid">Unpaid / Credit Tracks</option>
-                </select>
-            </div>
-            <button class="btn btn-primary w-100" id="filter-internship-btn">Re-Index Nodes</button>
-        </aside>
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <aside class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-24">
+                    <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-4">
+                        <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                        <h3 class="text-lg font-bold text-gray-900">Compensation Filters</h3>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label for="filter-stipend" class="block text-sm font-medium text-gray-700 mb-1">Stipend Status</label>
+                            <select id="filter-stipend" class="w-full rounded-md border border-gray-300 px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
+                                <option value="all">All Structures</option>
+                                <option value="paid">Paid Tracks</option>
+                                <option value="unpaid">Unpaid / Credit Tracks</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="filter-internship-btn" class="w-full bg-primary hover:bg-secondary text-white font-medium py-2.5 px-4 rounded-md transition shadow-sm flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Re-Index Nodes
+                    </button>
+                </div>
+            </aside>
 
-        <section class="listings">
-            <div class="listings-header">
-                <h1>Available Apprenticeships & Internships</h1>
-            </div>
-            <div class="jobs-list" id="internships-stream-target">
-                <p class="text-muted">Resolving standard internship documentation records...</p>
-            </div>
-        </section>
+            <section class="lg:col-span-3">
+                <div class="mb-6 border-b border-gray-200 pb-4 flex justify-between items-end">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Available Apprenticeships & Internships</h1>
+                        <p class="text-gray-500 mt-1">Review active pipeline nodes for hands-on experience matrices.</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="internships-stream-target">
+                    <div class="col-span-full bg-white p-8 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center animate-pulse">
+                        <div class="w-12 h-12 border-4 border-gray-200 border-t-primary rounded-full animate-spin mb-4"></div>
+                        <p class="text-gray-500 font-medium">Resolving standard internship documentation records...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
+
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold text-white mb-4">Daddy Media</h3>
+                    <p class="max-w-md text-gray-400 leading-relaxed text-sm">
+                        Empowering students, freshers, and professionals through continuous growth and unified job placement ecosystems.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <div class="flex flex-col space-y-2 text-sm">
+                        <a href="about.html" class="hover:text-white transition">About Us</a>
+                        <a href="contact.html" class="hover:text-white transition">Contact</a>
+                        <a href="faq.html" class="hover:text-white transition">FAQ</a>
+                        <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                        <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+                <p class="text-gray-500">&copy; 2026 Daddy Media. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -63,64 +143,130 @@
         const db = getFirestore(app);
         let currentUserReference = null;
 
+        // Handle Authentication UI
         onAuthStateChanged(auth, (user) => {
             currentUserReference = user;
-            document.getElementById('auth-container').innerHTML = user ? 
-                `<a href="profile.html" class="btn btn-outline">Profile Board</a>` : 
-                `<a href="index.html" class="btn btn-primary">Authenticate</a>`;
+            const authContainer = document.getElementById('auth-container');
+            
+            if (user) {
+                authContainer.innerHTML = `<a href="profile.html" class="text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md transition border border-gray-200">Profile Board</a>`;
+            } else {
+                authContainer.innerHTML = `<a href="index.html" class="bg-primary hover:bg-secondary text-white px-5 py-2 rounded-md text-sm font-medium transition shadow-sm">Authenticate</a>`;
+            }
+            
             renderInternshipMatrix();
         });
 
+        // Fetch and Render Data
         async function renderInternshipMatrix(stipendFilter = 'all') {
             const target = document.getElementById('internships-stream-target');
+            
+            // Show loading state while querying
+            target.innerHTML = `
+                <div class="col-span-full bg-white p-8 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                    <div class="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin mb-4"></div>
+                    <p class="text-gray-500 font-medium">Re-indexing array nodes...</p>
+                </div>
+            `;
+            
             try {
                 let ref = collection(db, "internships");
                 if(stipendFilter !== 'all') {
                     ref = query(collection(db, "internships"), where("stipend", "==", stipendFilter));
                 }
+                
                 const snap = await getDocs(ref);
+                
                 if(snap.empty) {
-                    target.innerHTML = '<p class="text-muted">Zero internship profiles match the specified execution query matrix.</p>';
+                    target.innerHTML = `
+                        <div class="col-span-full bg-gray-50 p-10 rounded-xl border border-gray-200 text-center">
+                            <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <p class="text-gray-600 font-medium">Zero internship profiles match the specified execution query matrix.</p>
+                            <p class="text-sm text-gray-400 mt-1">Try altering your compensation filters.</p>
+                        </div>
+                    `;
                     return;
                 }
+                
                 target.innerHTML = '';
                 snap.forEach((node) => {
                     const data = node.data();
                     const id = node.id;
                     const card = document.createElement('div');
-                    card.className = 'card mt-2';
+                    
+                    // Tailwind Card Styling
+                    card.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300 flex flex-col h-full';
                     card.innerHTML = `
-                        <h3>${data.title}</h3>
-                        <p class="text-muted"><strong>${data.company}</strong></p>
-                        <p>Expected Duration Model: ${data.duration}</p>
-                        <p>Classification Category: ${data.stipend === 'paid' ? 'Compensated' : 'Uncompensated'}</p>
-                        <div class="mt-2" id="int-action-${id}"></div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-gray-900 leading-tight">${data.title}</h3>
+                                <span class="bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap">
+                                    ${data.stipend === 'paid' ? 'Compensated' : 'Uncompensated'}
+                                </span>
+                            </div>
+                            <p class="text-primary font-medium mb-4">${data.company}</p>
+                            
+                            <div class="bg-gray-50 rounded-lg p-3 mb-4">
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Expected Duration Model: <strong class="ml-1 text-gray-800">${data.duration}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-4 border-t border-gray-100" id="int-action-${id}"></div>
                     `;
                     target.appendChild(card);
 
                     const act = document.getElementById(`int-action-${id}`);
+                    
                     if(currentUserReference) {
                         const btn = document.createElement('button');
-                        btn.className = 'btn btn-primary';
-                        btn.innerText = 'Lock Direct Intent';
+                        btn.className = 'w-full bg-primary hover:bg-secondary text-white font-medium py-2.5 px-4 rounded-md transition duration-200 shadow-sm flex justify-center items-center gap-2';
+                        btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Lock Direct Intent`;
+                        
                         btn.addEventListener('click', async () => {
-                            await addDoc(collection(db, "applications"), {
-                                applicantId: currentUserReference.uid,
-                                jobId: id,
-                                position: data.title,
-                                company: data.company,
-                                status: "Awaiting Admin Processing",
-                                timestamp: new Date()
-                            });
-                            alert('Ecosystem operational registry saved.');
+                            const originalHtml = btn.innerHTML;
+                            btn.innerHTML = 'Processing...';
+                            btn.disabled = true;
+                            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+                            try {
+                                await addDoc(collection(db, "applications"), {
+                                    applicantId: currentUserReference.uid,
+                                    jobId: id,
+                                    position: data.title,
+                                    company: data.company,
+                                    status: "Awaiting Admin Processing",
+                                    timestamp: new Date()
+                                });
+                                btn.innerHTML = 'Intent Registered ✓';
+                                btn.classList.replace('bg-primary', 'bg-green-600');
+                                btn.classList.replace('hover:bg-secondary', 'hover:bg-green-700');
+                                alert('Ecosystem operational registry saved.');
+                            } catch(e) {
+                                btn.innerHTML = originalHtml;
+                                btn.disabled = false;
+                                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                                alert(`Error registering intent: ${e.message}`);
+                            }
                         });
                         act.appendChild(btn);
                     } else {
-                        act.innerHTML = '<span class="text-muted">Access tokens missing. Sign-in required.</span>';
+                        act.innerHTML = `
+                            <div class="bg-gray-50 border border-gray-200 rounded-md p-3 text-center">
+                                <p class="text-xs font-medium text-gray-500">Access tokens missing.</p>
+                                <a href="index.html" class="text-sm font-semibold text-primary hover:underline mt-1 block">Sign-in required to apply</a>
+                            </div>
+                        `;
                     }
                 });
             } catch(e) {
-                target.innerHTML = `<p class="text-danger">Internal error mapping arrays: ${e.message}</p>`;
+                target.innerHTML = `
+                    <div class="col-span-full bg-red-50 text-red-600 p-4 rounded-md border border-red-200">
+                        <p class="font-semibold">Internal error mapping arrays:</p>
+                        <p class="text-sm mt-1">${e.message}</p>
+                    </div>
+                `;
             }
         }
 
