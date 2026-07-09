@@ -3,50 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explore Internships | Daddy Media</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Community Hub | Daddy Media</title>
+    <meta name="description" content="Connect with peers and professionals in the Daddy Media ecosystem.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#1e40af', // Blue-800
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">Daddy Media</a>
-            <nav class="nav-links">
-                <a href="jobs.html">Jobs</a>
-                <a href="internships.html" class="active">Internships</a>
-                <a href="community.html">Community</a>
-            </nav>
-            <div class="auth-buttons" id="auth-container"></div>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-primary transition">
+                    <img src="DaddyMediaLogo.png" alt="Daddy Media Logo" class="h-8 w-8 object-cover rounded" onerror="this.style.display='none'">
+                    Daddy Media
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="jobs.html" class="text-gray-600 hover:text-primary font-medium transition">Jobs</a>
+                    <a href="internships.html" class="text-gray-600 hover:text-primary font-medium transition">Internships</a>
+                    <a href="community.html" class="text-primary border-b-2 border-primary font-medium transition">Community</a>
+                </nav>
+
+                <div class="flex items-center" id="auth-container">
+                    <button disabled class="bg-gray-100 text-gray-400 px-4 py-2 rounded-md text-sm font-medium animate-pulse">Loading...</button>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="directory-layout container">
-        <aside class="filters">
-            <h3>Compensation Filters</h3>
-            <div class="filter-group">
-                <label for="filter-stipend">Stipend Status</label>
-                <select id="filter-stipend">
-                    <option value="all">All Structures</option>
-                    <option value="paid">Paid Tracks</option>
-                    <option value="unpaid">Unpaid / Credit Tracks</option>
-                </select>
-            </div>
-            <button class="btn btn-primary w-100" id="filter-internship-btn">Re-Index Nodes</button>
-        </aside>
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+        
+        <div class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">Peer-to-Peer Network Ecosystem</h1>
+            <p class="mt-2 text-lg text-gray-600">Engage with industry professionals, share insights, and accelerate your career topology.</p>
+        </div>
 
-        <section class="listings">
-            <div class="listings-header">
-                <h1>Available Apprenticeships & Internships</h1>
-            </div>
-            <div class="jobs-list" id="internships-stream-target">
-                <p class="text-muted">Resolving standard internship documentation records...</p>
-            </div>
-        </section>
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <aside class="lg:col-span-1 space-y-6">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Ecosystem Hubs</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <button class="w-full text-left px-3 py-2 rounded-md bg-blue-50 text-primary font-medium transition">All Discussions</button>
+                        </li>
+                        <li>
+                            <button class="w-full text-left px-3 py-2 rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">Career Advice</button>
+                        </li>
+                        <li>
+                            <button class="w-full text-left px-3 py-2 rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">Resume Reviews</button>
+                        </li>
+                        <li>
+                            <button class="w-full text-left px-3 py-2 rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">Interview Prep</button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" id="post-widget-container">
+                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3">Contribute to Network</h3>
+                    <p class="text-sm text-gray-500 mb-4">You must authenticate your identity node to inject new threads into the ecosystem.</p>
+                    <button disabled class="w-full bg-gray-100 text-gray-400 font-medium py-2 px-4 rounded-md cursor-not-allowed">Sign In to Post</button>
+                </div>
+            </aside>
+
+            <section class="lg:col-span-3">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Active Discussion Streams</h2>
+                    <select class="border border-gray-300 rounded-md py-1.5 px-3 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option>Most Recent</option>
+                        <option>Highest Engagement</option>
+                    </select>
+                </div>
+                
+                <div class="space-y-4" id="community-stream-target">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 animate-pulse">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
+                            <div>
+                                <div class="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                                <div class="h-3 bg-gray-200 rounded w-16"></div>
+                            </div>
+                        </div>
+                        <div class="h-5 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
+
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold text-white mb-4">Daddy Media</h3>
+                    <p class="max-w-md text-gray-400 leading-relaxed">
+                        Empowering students, freshers, and professionals through continuous growth and unified job placement ecosystems.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <div class="flex flex-col space-y-2">
+                        <a href="about.html" class="hover:text-white transition">About Us</a>
+                        <a href="contact.html" class="hover:text-white transition">Contact</a>
+                        <a href="faq.html" class="hover:text-white transition">FAQ</a>
+                        <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                        <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-gray-500">&copy; 2026 Daddy Media. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBn3w0R0qx8IA2MeAZETBxKBP02IqIVz8",
@@ -61,72 +155,103 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        let currentUserReference = null;
+        const provider = new GoogleAuthProvider();
 
+        let currentUserReference = null;
+        const authContainer = document.getElementById('auth-container');
+        const postWidgetContainer = document.getElementById('post-widget-container');
+
+        // Handle Authentication State
         onAuthStateChanged(auth, (user) => {
             currentUserReference = user;
-            document.getElementById('auth-container').innerHTML = user ? 
-                `<a href="profile.html" class="btn btn-outline">Profile Board</a>` : 
-                `<a href="index.html" class="btn btn-primary">Authenticate</a>`;
-            renderInternshipMatrix();
+            if (user) {
+                // Header Auth UI
+                authContainer.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <a href="profile.html" class="text-sm font-medium text-gray-700 hover:text-primary transition">Dashboard</a>
+                        <button id="logout-trigger" class="bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-md text-sm font-medium hover:bg-red-100 transition">Logout</button>
+                    </div>
+                `;
+                document.getElementById('logout-trigger').addEventListener('click', () => signOut(auth));
+                
+                // Sidebar Post UI
+                postWidgetContainer.innerHTML = `
+                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3">Contribute to Network</h3>
+                    <p class="text-sm text-gray-500 mb-4">Identity validated. Ready to inject new thread.</p>
+                    <button class="w-full bg-primary hover:bg-secondary text-white font-medium py-2 px-4 rounded-md transition shadow-sm">
+                        Create Discussion
+                    </button>
+                `;
+            } else {
+                // Header Auth UI
+                authContainer.innerHTML = `
+                    <button id="login-trigger" class="bg-primary hover:bg-secondary text-white px-5 py-2 rounded-md text-sm font-medium transition shadow-sm">
+                        Login
+                    </button>
+                `;
+                document.getElementById('login-trigger').addEventListener('click', () => signInWithPopup(auth, provider));
+
+                // Sidebar Post UI
+                postWidgetContainer.innerHTML = `
+                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3">Contribute to Network</h3>
+                    <p class="text-sm text-gray-500 mb-4">You must authenticate your identity node to inject new threads into the ecosystem.</p>
+                    <button class="w-full bg-gray-100 text-gray-400 font-medium py-2 px-4 rounded-md cursor-not-allowed">Sign In to Post</button>
+                `;
+            }
+            renderCommunityMatrix();
         });
 
-        async function renderInternshipMatrix(stipendFilter = 'all') {
-            const target = document.getElementById('internships-stream-target');
+        // Fetch Data and Render Feed
+        async function renderCommunityMatrix() {
+            const target = document.getElementById('community-stream-target');
             try {
-                let ref = collection(db, "internships");
-                if(stipendFilter !== 'all') {
-                    ref = query(collection(db, "internships"), where("stipend", "==", stipendFilter));
-                }
-                const snap = await getDocs(ref);
+                // Query a 'discussions' collection, assuming it exists
+                const snap = await getDocs(query(collection(db, "discussions"), orderBy("timestamp", "desc"), limit(10)));
+                
                 if(snap.empty) {
-                    target.innerHTML = '<p class="text-muted">Zero internship profiles match the specified execution query matrix.</p>';
+                    target.innerHTML = `
+                        <div class="bg-white p-10 rounded-xl shadow-sm border border-gray-100 text-center">
+                            <div class="text-4xl mb-3">🌱</div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-1">Ecosystem is quiet</h3>
+                            <p class="text-gray-500">Be the first to inject a discussion thread into this node.</p>
+                        </div>
+                    `;
                     return;
                 }
+                
                 target.innerHTML = '';
                 snap.forEach((node) => {
                     const data = node.data();
-                    const id = node.id;
-                    const card = document.createElement('div');
-                    card.className = 'card mt-2';
-                    card.innerHTML = `
-                        <h3>${data.title}</h3>
-                        <p class="text-muted"><strong>${data.company}</strong></p>
-                        <p>Expected Duration Model: ${data.duration}</p>
-                        <p>Classification Category: ${data.stipend === 'paid' ? 'Compensated' : 'Uncompensated'}</p>
-                        <div class="mt-2" id="int-action-${id}"></div>
+                    target.innerHTML += `
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition duration-300">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold text-lg uppercase">
+                                    ${data.author ? data.author.charAt(0) : 'U'}
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-900 text-sm">${data.author || 'Anonymous Node'}</p>
+                                    <p class="text-xs text-gray-500">${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString() : 'Recently'}</p>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">${data.title || 'Untitled Thread'}</h3>
+                            <p class="text-gray-600 mb-4 leading-relaxed line-clamp-3">${data.content || 'No content provided in this matrix block.'}</p>
+                            <div class="flex items-center gap-4 border-t border-gray-100 pt-4 mt-2">
+                                <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-primary transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.514"></path></svg>
+                                    ${data.likes || 0} Endorsements
+                                </button>
+                                <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-primary transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                    ${data.replies || 0} Replies
+                                </button>
+                            </div>
+                        </div>
                     `;
-                    target.appendChild(card);
-
-                    const act = document.getElementById(`int-action-${id}`);
-                    if(currentUserReference) {
-                        const btn = document.createElement('button');
-                        btn.className = 'btn btn-primary';
-                        btn.innerText = 'Lock Direct Intent';
-                        btn.addEventListener('click', async () => {
-                            await addDoc(collection(db, "applications"), {
-                                applicantId: currentUserReference.uid,
-                                jobId: id,
-                                position: data.title,
-                                company: data.company,
-                                status: "Awaiting Admin Processing",
-                                timestamp: new Date()
-                            });
-                            alert('Ecosystem operational registry saved.');
-                        });
-                        act.appendChild(btn);
-                    } else {
-                        act.innerHTML = '<span class="text-muted">Access tokens missing. Sign-in required.</span>';
-                    }
                 });
             } catch(e) {
-                target.innerHTML = `<p class="text-danger">Internal error mapping arrays: ${e.message}</p>`;
+                target.innerHTML = `<div class="bg-red-50 text-red-600 p-4 rounded-md border border-red-200 text-sm">Internal error mapping arrays: ${e.message}</div>`;
             }
         }
-
-        document.getElementById('filter-internship-btn').addEventListener('click', () => {
-            renderInternshipMatrix(document.getElementById('filter-stipend').value);
-        });
     </script>
 </body>
 </html>
