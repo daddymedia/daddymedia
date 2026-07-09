@@ -4,32 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecosystem Vision Blueprint | Daddy Media</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Daddy Media platform architecture and target demographics.">
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN for instant styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#1e40af', // Blue-800
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">Daddy Media</a>
-            <nav class="nav-links">
-                <a href="jobs.html">Jobs</a>
-                <a href="internships.html">Internships</a>
-                <a href="community.html">Community</a>
-            </nav>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-primary transition">
+                    <img src="DaddyMediaLogo.png" alt="Daddy Media Logo" class="h-8 w-8 object-cover rounded" onerror="this.style.display='none'">
+                    Daddy Media
+                </a>
+                
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="jobs.html" class="text-gray-600 hover:text-primary font-medium transition">Jobs</a>
+                    <a href="internships.html" class="text-gray-600 hover:text-primary font-medium transition">Internships</a>
+                    <a href="community.html" class="text-gray-600 hover:text-primary font-medium transition">Community</a>
+                </nav>
+
+                <!-- Static Auth Button Placeholder -->
+                <div class="flex items-center">
+                    <a href="index.html" class="bg-primary hover:bg-secondary text-white px-5 py-2 rounded-md text-sm font-medium transition shadow-sm">
+                        Login
+                    </a>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="container mt-4" style="max-width: 800px;">
-        <article class="card">
-            <h1>Platform Architectural System Parameters</h1>
-            <p class="mt-2 text-muted" style="font-size: 1.2rem;">Daddy Media functions as a decentralized portal system designed to accelerate talent profiling and cross-company verification interfaces.</p>
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <article class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
             
-            <h2 class="mt-4">Target Demographics Map</h2>
-            <p>Our operational framework isolates career nodes to directly serve targeted groups:</p>
-            <ul class="mt-2" style="padding-left:20px; line-height: 2;">
-                <li><strong>Academic Cohorts & Freshers:</strong> Securing foundational real-world experience mapping profiles.</li>
-                <li><strong>Industry Professionals:</strong> Sourcing structured professional horizontal career hops.</li>
-            </ul>
+            <!-- Vision Section -->
+            <div class="border-b border-gray-100 pb-10 mb-10">
+                <span class="text-primary font-semibold tracking-wider uppercase text-sm mb-2 block">Ecosystem Vision Blueprint</span>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 tracking-tight">Platform Architectural System Parameters</h1>
+                <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl">
+                    Daddy Media functions as a decentralized portal system designed to accelerate talent profiling and cross-company verification interfaces.
+                </p>
+            </div>
+            
+            <!-- Demographics Section -->
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Target Demographics Map</h2>
+                <p class="text-gray-600 mb-8 text-lg">
+                    Our operational framework isolates career nodes to directly serve targeted groups:
+                </p>
+                
+                <!-- Cards Grid replacing standard list -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Card 1 -->
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-6 hover:shadow-md transition duration-300">
+                        <div class="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center mb-4 text-2xl">
+                            🎓
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Academic Cohorts & Freshers</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Securing foundational real-world experience mapping profiles.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 hover:shadow-md transition duration-300">
+                        <div class="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center mb-4 text-2xl">
+                            💼
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Industry Professionals</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Sourcing structured professional horizontal career hops.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
         </article>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold text-white mb-4">Daddy Media</h3>
+                    <p class="max-w-md text-gray-400 leading-relaxed">
+                        Empowering students, freshers, and professionals through continuous growth and unified job placement ecosystems.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <div class="flex flex-col space-y-2">
+                        <a href="about.html" class="text-white transition">About Us</a>
+                        <a href="contact.html" class="hover:text-white transition">Contact</a>
+                        <a href="faq.html" class="hover:text-white transition">FAQ</a>
+                        <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                        <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-gray-500">&copy; 2026 Daddy Media. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
