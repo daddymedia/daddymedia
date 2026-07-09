@@ -4,41 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore Jobs | Daddy Media</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Discover and apply for top-tier job opportunities across various verticals.">
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN for instant styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#1e40af', // Blue-800
+                        dark: '#111827', // Gray-900
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">Daddy Media</a>
-            <nav class="nav-links">
-                <a href="jobs.html" class="active">Jobs</a>
-                <a href="internships.html">Internships</a>
-                <a href="community.html">Community</a>
-            </nav>
-            <div class="auth-buttons" id="auth-container"></div>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-primary transition">
+                    <img src="DaddyMediaLogo.png" alt="Daddy Media Logo" class="h-8 w-8 object-cover rounded" onerror="this.style.display='none'">
+                    Daddy Media
+                </a>
+                
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="jobs.html" class="text-primary border-b-2 border-primary font-medium transition">Jobs</a>
+                    <a href="internships.html" class="text-gray-600 hover:text-primary font-medium transition">Internships</a>
+                    <a href="community.html" class="text-gray-600 hover:text-primary font-medium transition">Community</a>
+                </nav>
+
+                <!-- Auth Buttons Placeholder -->
+                <div class="flex items-center" id="auth-container">
+                    <button disabled class="bg-gray-100 text-gray-400 px-4 py-2 rounded-md text-sm font-medium animate-pulse">Loading...</button>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="directory-layout container">
-        <aside class="filters">
-            <h3>Refine Parameters</h3>
-            <div class="filter-group">
-                <label for="filter-category">Job Vertical</label>
-                <input type="text" id="filter-category" placeholder="Engineering, Design, Finance...">
-            </div>
-            <button class="btn btn-primary w-100" id="filter-trigger-btn">Execute Filter Sequence</button>
-        </aside>
+    <!-- Main Directory Layout -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- Sidebar / Filters -->
+            <aside class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-24">
+                    <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-4">
+                        <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        <h3 class="text-lg font-bold text-gray-900">Refine Parameters</h3>
+                    </div>
+                    
+                    <div class="space-y-5 mb-6">
+                        <div>
+                            <label for="filter-category" class="block text-sm font-medium text-gray-700 mb-1">Job Vertical</label>
+                            <input type="text" id="filter-category" placeholder="Engineering, Design, Finance..." class="w-full rounded-md border border-gray-300 px-3 py-2.5 bg-gray-50 focus:bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
+                        </div>
+                    </div>
+                    
+                    <button id="filter-trigger-btn" class="w-full bg-primary hover:bg-secondary text-white font-medium py-2.5 px-4 rounded-md transition shadow-sm flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        Execute Filter Sequence
+                    </button>
+                </div>
+            </aside>
 
-        <section class="listings">
-            <div class="listings-header">
-                <h1>Available Job Openings</h1>
-            </div>
-            <div class="jobs-list" id="jobs-stream-target">
-                <p class="text-muted">Parsing distributed listing collections...</p>
-            </div>
-        </section>
+            <!-- Listings Section -->
+            <section class="lg:col-span-3">
+                <div class="mb-6 border-b border-gray-200 pb-4 flex justify-between items-end">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Available Job Openings</h1>
+                        <p class="text-gray-500 mt-1">Review active pipeline nodes for professional career placement.</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="jobs-stream-target">
+                    <!-- Loading Skeleton -->
+                    <div class="col-span-full bg-white p-8 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center animate-pulse">
+                        <div class="w-12 h-12 border-4 border-gray-200 border-t-primary rounded-full animate-spin mb-4"></div>
+                        <p class="text-gray-500 font-medium">Parsing distributed listing collections...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold text-white mb-4">Daddy Media</h3>
+                    <p class="max-w-md text-gray-400 leading-relaxed text-sm">
+                        Empowering students, freshers, and professionals through continuous growth and unified job placement ecosystems.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <div class="flex flex-col space-y-2 text-sm">
+                        <a href="about.html" class="hover:text-white transition">About Us</a>
+                        <a href="contact.html" class="hover:text-white transition">Contact</a>
+                        <a href="faq.html" class="hover:text-white transition">FAQ</a>
+                        <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                        <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+                <p class="text-gray-500">&copy; 2026 Daddy Media. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -59,66 +152,133 @@
         const db = getFirestore(app);
         let currentActiveUser = null;
 
+        // Handle Authentication UI
         onAuthStateChanged(auth, (user) => {
             currentActiveUser = user;
             const container = document.getElementById('auth-container');
+            
             if(user) {
-                container.innerHTML = `<a href="profile.html" class="btn btn-outline">Profile Hub</a>`;
+                container.innerHTML = `<a href="profile.html" class="text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md transition border border-gray-200">Profile Hub</a>`;
             } else {
-                container.innerHTML = `<a href="index.html" class="btn btn-primary">Login at Main Node</a>`;
+                container.innerHTML = `<a href="index.html" class="bg-primary hover:bg-secondary text-white px-5 py-2 rounded-md text-sm font-medium transition shadow-sm">Login at Main Node</a>`;
             }
+            
             renderJobsMap();
         });
 
+        // Fetch and Render Data
         async function renderJobsMap(filterCategory = '') {
             const target = document.getElementById('jobs-stream-target');
+            
+            // Show loading state
+            target.innerHTML = `
+                <div class="col-span-full bg-white p-8 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                    <div class="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin mb-4"></div>
+                    <p class="text-gray-500 font-medium">Parsing distributed listing collections...</p>
+                </div>
+            `;
+            
             try {
                 let queryRef = collection(db, "jobs");
                 if (filterCategory) {
                     queryRef = query(collection(db, "jobs"), where("category", "==", filterCategory));
                 }
+                
                 const snap = await getDocs(queryRef);
+                
                 if (snap.empty) {
-                    target.innerHTML = '<p class="text-muted">No database entries matched query variables.</p>';
+                    target.innerHTML = `
+                        <div class="col-span-full bg-gray-50 p-10 rounded-xl border border-gray-200 text-center">
+                            <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            <p class="text-gray-600 font-medium">No database entries matched query variables.</p>
+                            <p class="text-sm text-gray-400 mt-1">Try broadening your Job Vertical filter.</p>
+                        </div>
+                    `;
                     return;
                 }
+                
                 target.innerHTML = '';
                 snap.forEach((documentNode) => {
                     const data = documentNode.data();
                     const id = documentNode.id;
                     const card = document.createElement('div');
-                    card.className = 'card mt-2';
+                    
+                    // Tailwind Card Styling
+                    card.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300 flex flex-col h-full';
                     card.innerHTML = `
-                        <h3>${data.title}</h3>
-                        <p class="text-muted"><strong>${data.company}</strong> | Location Matrix: ${data.location}</p>
-                        <p>Compensation Mapping Scale: $${data.salary || 'Unspecified'}</p>
-                        <div class="auth-action-zone mt-2" id="action-zone-${id}"></div>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-bold text-gray-900 leading-tight mb-3">${data.title}</h3>
+                            
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="font-semibold text-primary">${data.company}</span>
+                            </div>
+                            
+                            <div class="flex items-center text-sm text-gray-500 mb-4">
+                                <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                Location Matrix: ${data.location || 'Unspecified'}
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-lg p-3 mb-4 border border-gray-100">
+                                <p class="text-sm text-gray-600">Compensation Mapping Scale: <strong class="text-gray-900 ml-1">$${data.salary || 'Unspecified'}</strong></p>
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-4 border-t border-gray-100" id="action-zone-${id}"></div>
                     `;
                     target.appendChild(card);
 
                     const actionZone = document.getElementById(`action-zone-${id}`);
+                    
                     if (currentActiveUser) {
                         const applyBtn = document.createElement('button');
-                        applyBtn.className = 'btn btn-primary';
-                        applyBtn.innerText = 'Transmit Application';
+                        applyBtn.className = 'w-full bg-primary hover:bg-secondary text-white font-medium py-2.5 px-4 rounded-md transition duration-200 shadow-sm flex justify-center items-center gap-2';
+                        applyBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Transmit Application`;
+                        
                         applyBtn.addEventListener('click', async () => {
-                            await addDoc(collection(db, "applications"), {
-                                applicantId: currentActiveUser.uid,
-                                jobId: id,
-                                position: data.title,
-                                company: data.company,
-                                status: "Pending Technical Screening",
-                                timestamp: new Date()
-                            });
-                            alert('Application successfully appended to database pipelines.');
+                            const originalHtml = applyBtn.innerHTML;
+                            applyBtn.innerHTML = 'Transmitting...';
+                            applyBtn.disabled = true;
+                            applyBtn.classList.add('opacity-75', 'cursor-not-allowed');
+
+                            try {
+                                await addDoc(collection(db, "applications"), {
+                                    applicantId: currentActiveUser.uid,
+                                    jobId: id,
+                                    position: data.title,
+                                    company: data.company,
+                                    status: "Pending Technical Screening",
+                                    timestamp: new Date()
+                                });
+                                applyBtn.innerHTML = 'Application Sent ✓';
+                                applyBtn.classList.replace('bg-primary', 'bg-green-600');
+                                applyBtn.classList.replace('hover:bg-secondary', 'hover:bg-green-700');
+                                alert('Application successfully appended to database pipelines.');
+                            } catch (e) {
+                                applyBtn.innerHTML = originalHtml;
+                                applyBtn.disabled = false;
+                                applyBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                                alert(`Error transmitting application: ${e.message}`);
+                            }
                         });
                         actionZone.appendChild(applyBtn);
                     } else {
-                        actionZone.innerHTML = '<span class="text-muted" style="font-size:0.9rem;">Authentication status required for application dispatch mechanisms.</span>';
+                        actionZone.innerHTML = `
+                            <div class="bg-gray-50 border border-gray-200 rounded-md p-3 text-center">
+                                <p class="text-xs font-medium text-gray-500">Authentication status required for application dispatch mechanisms.</p>
+                                <a href="index.html" class="text-sm font-semibold text-primary hover:underline mt-1 block">Login at Main Node</a>
+                            </div>
+                        `;
                     }
                 });
             } catch (err) {
-                target.innerHTML = `<p class="text-danger">Query validation failure: ${err.message}</p>`;
+                target.innerHTML = `
+                    <div class="col-span-full bg-red-50 text-red-600 p-4 rounded-md border border-red-200">
+                        <p class="font-semibold flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Query validation failure
+                        </p>
+                        <p class="text-sm mt-1 ml-7">${err.message}</p>
+                    </div>
+                `;
             }
         }
 
