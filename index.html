@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daddy Media | Jobs, Internships & Community</title>
-    <meta name="description" content="Discover jobs, internships, and networking opportunities for students, freshers, and professionals.">
-    <!-- SEO & Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <meta name="description" content="Discover jobs, internships, communities, career resources, and networking opportunities.">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Navigation -->
+    <!-- Navigation Interface -->
     <header class="navbar">
         <div class="container">
             <a href="index.html" class="logo">Daddy Media</a>
@@ -20,52 +18,52 @@
                 <a href="community.html">Community</a>
             </nav>
             <div class="auth-buttons" id="auth-container">
-                <button id="login-btn" class="btn btn-outline">Login</button>
-                <button id="signup-btn" class="btn btn-primary">Sign Up</button>
+                <button id="auth-action-btn" class="btn btn-primary">Authenticating...</button>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section Matrix -->
     <section class="hero">
         <div class="container">
             <h1>Launch Your Career with Daddy Media</h1>
-            <p>Find the best jobs, internships, and connect with a thriving community of professionals and students.</p>
+            <p>Discover high-quality jobs, specialized internships, and connect with a thriving network of professionals and peers.</p>
             <div class="search-bar">
-                <input type="text" id="global-search" placeholder="Search for jobs, skills, or companies...">
-                <button class="btn btn-primary" onclick="performSearch()">Search</button>
+                <input type="text" id="global-search" placeholder="Search for positions, skillsets, or firms...">
+                <button class="btn btn-primary" id="hero-search-btn">Search</button>
             </div>
         </div>
     </section>
 
-    <!-- Featured Jobs Section -->
-    <section class="featured-section">
-        <div class="container">
-            <h2>Featured Jobs</h2>
-            <div class="grid" id="featured-jobs-container">
-                <!-- Dynamically populated by JS -->
-                <p class="loading-text">Loading jobs...</p>
+    <!-- Main Content Stream Grid Maps -->
+    <main class="container mt-4">
+        <section>
+            <h2>Featured Job Opportunities</h2>
+            <div class="grid mt-2" id="featured-jobs-container">
+                <p class="text-muted">Querying global live job nodes...</p>
             </div>
-            <a href="jobs.html" class="btn btn-outline view-all">View All Jobs</a>
-        </div>
-    </section>
-
-    <!-- Trending Communities -->
-    <section class="community-section bg-light">
-        <div class="container">
-            <h2>Trending Communities</h2>
-            <div class="grid" id="trending-communities-container">
-                <!-- Dynamically populated by JS -->
+            <div class="text-center mt-2">
+                <a href="jobs.html" class="btn btn-outline">View All Jobs</a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
+        <section class="mt-4">
+            <h2>Featured Corporate Internships</h2>
+            <div class="grid mt-2" id="featured-internships-container">
+                <p class="text-muted">Querying global live internship nodes...</p>
+            </div>
+            <div class="text-center mt-2">
+                <a href="internships.html" class="btn btn-outline">View All Internships</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Segment -->
     <footer>
         <div class="container footer-grid">
             <div class="footer-brand">
                 <h3>Daddy Media</h3>
-                <p>Empowering the next generation of professionals.</p>
+                <p>Empowering students, freshers, and professionals through continuous growth and unified job placement ecosystems.</p>
             </div>
             <div class="footer-links">
                 <a href="about.html">About</a>
@@ -80,9 +78,85 @@
         </div>
     </footer>
 
-    <!-- Firebase SDKs (Modular) -->
-    <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/main.js"></script>
+    <!-- Integrated Dynamic Backend Application Layer Modules -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, limit, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBn3w0R0qx8IA2MeAZETBxKBP02IqIVz8",
+            authDomain: "daddy-media.firebaseapp.com",
+            projectId: "daddy-media",
+            storageBucket: "daddy-media.firebasestorage.app",
+            messagingSenderId: "13022563374",
+            appId: "1:13022563374:web:1123e9bec9d49d192823bf",
+            measurementId: "G-LWX8MJ7SW5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // Core Identity Controller Layer mapping UI states
+        const authContainer = document.getElementById('auth-container');
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authContainer.innerHTML = `
+                    <a href="profile.html" class="btn btn-outline">Dashboard</a>
+                    <button id="logout-trigger" class="btn btn-outline text-danger">Logout</button>
+                `;
+                document.getElementById('logout-trigger').addEventListener('click', () => signOut(auth));
+            } else {
+                authContainer.innerHTML = `<button id="login-trigger" class="btn btn-primary">Login with Google</button>`;
+                document.getElementById('login-trigger').addEventListener('click', () => signInWithPopup(auth, provider));
+            }
+        });
+
+        // Query Engine mapping records to interface UI cards
+        async function fetchFeaturedContent() {
+            try {
+                const jobSnap = await getDocs(query(collection(db, "jobs"), limit(3)));
+                const jobContainer = document.getElementById('featured-jobs-container');
+                if(jobSnap.empty) {
+                    jobContainer.innerHTML = '<p class="text-muted">No jobs currently streaming.</p>';
+                } else {
+                    jobContainer.innerHTML = '';
+                    jobSnap.forEach((doc) => {
+                        const data = doc.data();
+                        jobContainer.innerHTML += `
+                            <div class="card">
+                                <h3>${data.title || 'Position'}</h3>
+                                <p class="text-muted"><strong>${data.company || 'Organization'}</strong> - ${data.location || 'Remote'}</p>
+                                <p class="mt-2">Vertical: ${data.category || 'General'}</p>
+                                <a href="jobs.html" class="btn btn-primary mt-2 w-100">Review & Apply</a>
+                            </div>`;
+                    });
+                }
+
+                const intSnap = await getDocs(query(collection(db, "internships"), limit(3)));
+                const intContainer = document.getElementById('featured-internships-container');
+                if(intSnap.empty) {
+                    intContainer.innerHTML = '<p class="text-muted">No internship loops currently open.</p>';
+                } else {
+                    intContainer.innerHTML = '';
+                    intSnap.forEach((doc) => {
+                        const data = doc.data();
+                        intContainer.innerHTML += `
+                            <div class="card">
+                                <h3>${data.title || 'Intern Role'}</h3>
+                                <p class="text-muted"><strong>${data.company || 'Firm'}</strong></p>
+                                <p class="mt-2">Horizon Span: ${data.duration || 'Flexible'}</p>
+                                <a href="internships.html" class="btn btn-primary mt-2 w-100">Review Track</a>
+                            </div>`;
+                    });
+                }
+            } catch (err) {
+                console.error("Content structural stream error: ", err);
+            }
+        }
+        fetchFeaturedContent();
+    </script>
 </body>
 </html>
