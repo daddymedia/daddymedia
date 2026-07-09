@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Hub | Daddy Media</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Identity Central</a>
+            <div class="auth-buttons">
+                <a href="index.html" class="btn btn-outline">Home Terminal</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="directory-layout container mt-4">
+        <aside class="filters">
+            <h3>Control Panels</h3>
+            <ul style="list-style:none; padding:0; line-height:3;">
+                <li><strong style="cursor:pointer;" onclick="switchPane('overview')">System Parameters</strong></li>
+                <li><strong style="cursor:pointer;" onclick="switchPane('tracker')">Application Tracker Logs</strong></li>
+            </ul>
+        </aside>
+
+        <section class="listings">
+            <div id="pane-overview" class="pane-target">
+                <h2>Account Verification State</h2>
+                <div class="card mt-2">
+                    <p>Internal Verification ID Hash: <span id="uuid-hash-target" class="text-muted">Loading identity mapping...</span></p>
+                    <p class="mt-2">Authentication Group Email Address: <span id="email-string-target">Checking security tokens...</span></p>
+                </div>
+
+                <div class="card mt-4">
+                    <h3>Modify Extended Bio Profile Parameters</h3>
+                    <div class="filter-group mt-2">
+                        <label for="user-bio-input">Professional Biography Area Text</label>
+                        <textarea id="user-bio-input" rows="3" placeholder="Input specific background attributes..."></textarea>
+                    </div>
+                    <button class="btn btn-primary mt-2" id="save-bio-btn">Synchronize Records</button>
+                </div>
+            </div>
+
+            <div id="pane-tracker" class="pane-target" style="display:none;">
+                <h2>Historical Transmitted Application Payload Strings</h2>
+                <div id="application-records-box" class="mt-2">
+                    <p class="text-muted">Querying contextual relational databases...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBn3w0R0qx8IA2MeAZETBxKBP02IqIVz8",
+            authDomain: "daddy-media.firebaseapp.com",
+            projectId: "daddy-media",
+            storageBucket: "daddy-media.firebasestorage.app",
+            messagingSenderId: "13022563374",
+            appId: "1:13022563374:web:1123e9bec9d49d192823bf",
+            measurementId: "G-LWX8MJ7SW5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if(!user) {
+                window.location.href = "index.html";
+                return;
+            }
+            document.getElementById('uuid-hash-target').innerText = user.uid;
+            document.getElementById('email-string-target').innerText = user.email;
+
+            // Fetch bio fields from profile record structure
+            const docRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(docRef);
+            if(userDoc.exists()) {
+                document.getElementById('user-bio-input').value = userDoc.data().bio || '';
+            }
+
+            // Sync applications matching identity scope
+            syncAppRecords(user.uid);
+        });
+
+        async function syncAppRecords(uid) {
+            const container = document.getElementById('application-records-box');
+            try {
+                const snap = await getDocs(query(collection(db, "applications"), where("applicantId", "==", uid)));
+                if(snap.empty) {
+                    container.innerHTML = '<p class="text-muted">Zero historically pushed application instances associated with this UID mapping.</p>';
+                    return;
+                }
+                container.innerHTML = '';
+                snap.forEach((d) => {
+                    const data = d.data();
+                    container.innerHTML += `
+                        <div class="card mt-2">
+                            <h4>Target: ${data.position}</h4>
+                            <p class="text-muted">Organization Node Pointer: ${data.company}</p>
+                            <p class="mt-2">Workflow State Tracker Status: <span class="btn btn-outline" style="padding:2px 8px; font-size:0.8rem;">${data.status}</span></p>
+                        </div>
+                    `;
+                });
+            } catch(e) {
+                container.innerHTML = `<p class="text-danger">Failed to fetch logs: ${e.message}</p>`;
+            }
+        }
+
+        document.getElementById('save-bio-btn').addEventListener('click', async () => {
+            const u = auth.currentUser;
+            if(!u) return;
+            const txt = document.getElementById('user-bio-input').value;
+            await setDoc(doc(db, "users", u.uid), { bio: txt }, { merge: true });
+            alert('Extended parameters written successfully.');
+        });
+
+        window.switchPane = function(target) {
+            document.querySelectorAll('.pane-target').forEach(p => p.style.display = 'none');
+            document.getElementById(`pane-${target}`).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
