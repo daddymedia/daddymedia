@@ -8,57 +8,56 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Navigation Interface -->
     <header class="navbar">
         <div class="container">
-            <a href="index.html" class="logo">Daddy Media</a>
+            <a href="index.html" class="logo">
+                <img src="DaddyMediaLogo.png" alt="Daddy Media Logo">
+                Daddy Media
+            </a>
             <nav class="nav-links">
                 <a href="jobs.html">Jobs</a>
                 <a href="internships.html">Internships</a>
                 <a href="community.html">Community</a>
             </nav>
             <div class="auth-buttons" id="auth-container">
-                <button id="auth-action-btn" class="btn btn-primary">Authenticating...</button>
+                <button id="auth-action-btn" class="btn btn-primary">Loading...</button>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section Matrix -->
     <section class="hero">
         <div class="container">
             <h1>Launch Your Career with Daddy Media</h1>
             <p>Discover high-quality jobs, specialized internships, and connect with a thriving network of professionals and peers.</p>
             <div class="search-bar">
-                <input type="text" id="global-search" placeholder="Search for positions, skillsets, or firms...">
+                <input type="text" id="global-search" placeholder="Search for positions, skills, or companies...">
                 <button class="btn btn-primary" id="hero-search-btn">Search</button>
             </div>
         </div>
     </section>
 
-    <!-- Main Content Stream Grid Maps -->
     <main class="container mt-4">
         <section>
             <h2>Featured Job Opportunities</h2>
             <div class="grid mt-2" id="featured-jobs-container">
-                <p class="text-muted">Querying global live job nodes...</p>
+                <p class="text-muted">Loading featured jobs...</p>
             </div>
-            <div class="text-center mt-2">
+            <div class="text-center mt-4">
                 <a href="jobs.html" class="btn btn-outline">View All Jobs</a>
             </div>
         </section>
 
         <section class="mt-4">
-            <h2>Featured Corporate Internships</h2>
+            <h2>Featured Internships</h2>
             <div class="grid mt-2" id="featured-internships-container">
-                <p class="text-muted">Querying global live internship nodes...</p>
+                <p class="text-muted">Loading featured internships...</p>
             </div>
-            <div class="text-center mt-2">
+            <div class="text-center mt-4">
                 <a href="internships.html" class="btn btn-outline">View All Internships</a>
             </div>
         </section>
     </main>
 
-    <!-- Footer Segment -->
     <footer>
         <div class="container footer-grid">
             <div class="footer-brand">
@@ -78,7 +77,6 @@
         </div>
     </footer>
 
-    <!-- Integrated Dynamic Backend Application Layer Modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -99,13 +97,12 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // Core Identity Controller Layer mapping UI states
         const authContainer = document.getElementById('auth-container');
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 authContainer.innerHTML = `
                     <a href="profile.html" class="btn btn-outline">Dashboard</a>
-                    <button id="logout-trigger" class="btn btn-outline text-danger">Logout</button>
+                    <button id="logout-trigger" class="btn btn-outline" style="color:var(--danger); border-color:var(--danger); margin-left:10px;">Logout</button>
                 `;
                 document.getElementById('logout-trigger').addEventListener('click', () => signOut(auth));
             } else {
@@ -114,13 +111,12 @@
             }
         });
 
-        // Query Engine mapping records to interface UI cards
         async function fetchFeaturedContent() {
             try {
                 const jobSnap = await getDocs(query(collection(db, "jobs"), limit(3)));
                 const jobContainer = document.getElementById('featured-jobs-container');
                 if(jobSnap.empty) {
-                    jobContainer.innerHTML = '<p class="text-muted">No jobs currently streaming.</p>';
+                    jobContainer.innerHTML = '<p class="text-muted">No jobs currently posted.</p>';
                 } else {
                     jobContainer.innerHTML = '';
                     jobSnap.forEach((doc) => {
@@ -128,9 +124,9 @@
                         jobContainer.innerHTML += `
                             <div class="card">
                                 <h3>${data.title || 'Position'}</h3>
-                                <p class="text-muted"><strong>${data.company || 'Organization'}</strong> - ${data.location || 'Remote'}</p>
-                                <p class="mt-2">Vertical: ${data.category || 'General'}</p>
-                                <a href="jobs.html" class="btn btn-primary mt-2 w-100">Review & Apply</a>
+                                <p class="text-muted"><strong>${data.company || 'Company'}</strong> - ${data.location || 'Remote'}</p>
+                                <p class="mt-2">Category: ${data.category || 'General'}</p>
+                                <a href="jobs.html" class="btn btn-primary mt-2 w-100">View Job</a>
                             </div>`;
                     });
                 }
@@ -138,7 +134,7 @@
                 const intSnap = await getDocs(query(collection(db, "internships"), limit(3)));
                 const intContainer = document.getElementById('featured-internships-container');
                 if(intSnap.empty) {
-                    intContainer.innerHTML = '<p class="text-muted">No internship loops currently open.</p>';
+                    intContainer.innerHTML = '<p class="text-muted">No internships currently posted.</p>';
                 } else {
                     intContainer.innerHTML = '';
                     intSnap.forEach((doc) => {
@@ -146,14 +142,14 @@
                         intContainer.innerHTML += `
                             <div class="card">
                                 <h3>${data.title || 'Intern Role'}</h3>
-                                <p class="text-muted"><strong>${data.company || 'Firm'}</strong></p>
-                                <p class="mt-2">Horizon Span: ${data.duration || 'Flexible'}</p>
-                                <a href="internships.html" class="btn btn-primary mt-2 w-100">Review Track</a>
+                                <p class="text-muted"><strong>${data.company || 'Company'}</strong></p>
+                                <p class="mt-2">Duration: ${data.duration || 'Flexible'}</p>
+                                <a href="internships.html" class="btn btn-primary mt-2 w-100">View Internship</a>
                             </div>`;
                     });
                 }
             } catch (err) {
-                console.error("Content structural stream error: ", err);
+                console.error("Error fetching content: ", err);
             }
         }
         fetchFeaturedContent();
