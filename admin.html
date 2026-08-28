@@ -79,11 +79,12 @@
             </div>
 
             <div class="bg-white border border-gold/30 p-8 shadow-sm">
-                <h2 class="text-2xl font-serif text-darkgold mb-6">Upload New E-Book</h2>
+                <h2 id="form-section-title" class="text-2xl font-serif text-darkgold mb-6">Upload New E-Book</h2>
                 
                 <div id="upload-feedback" class="hidden mb-6 p-4 text-xs sm:text-sm"></div>
 
-                <form onsubmit="handleBookUpload(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form onsubmit="handleBookSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="hidden" id="edit-book-id" value="">
                     <div>
                         <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">E-Book Title *</label>
                         <input type="text" id="book-title" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. The Golden Horizon">
@@ -97,6 +98,21 @@
                         <textarea id="book-desc" rows="3" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Write a summary description of the e-book..."></textarea>
                     </div>
                     <div>
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Pricing Type *</label>
+                        <select id="book-pricing-type" onchange="togglePricingFields()" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl">
+                            <option value="Paid">Paid</option>
+                            <option value="Free">Free</option>
+                        </select>
+                    </div>
+                    <div id="price-field-wrapper">
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Price (₹) *</label>
+                        <input type="number" id="book-price" min="0" step="0.01" value="499" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. 499">
+                    </div>
+                    <div id="discount-field-wrapper">
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Discount Applied (%) *</label>
+                        <input type="number" id="book-discount" min="0" max="100" value="0" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. 15">
+                    </div>
+                    <div>
                         <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Stock Status *</label>
                         <select id="book-status" onchange="toggleStockField()" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl">
                             <option value="Available">Available (No. of Stocks Left)</option>
@@ -108,28 +124,31 @@
                         <input type="number" id="book-stock-count" min="0" value="10" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. 15">
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Buy Now Payment Link URL *</label>
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Buy Now / Claim Link URL *</label>
                         <input type="text" id="book-payment-url" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="https://paymentgateway.com/pay/...">
                     </div>
-                    <div class="md:col-span-2">
-                        <button type="submit" class="bg-darkgold text-white px-8 py-3 uppercase tracking-widest text-xs hover:bg-gold transition shadow-sm">
+                    <div class="md:col-span-2 flex items-center space-x-4">
+                        <button type="submit" id="submit-btn" class="bg-darkgold text-white px-8 py-3 uppercase tracking-widest text-xs hover:bg-gold transition shadow-sm">
                             Publish E-Book
+                        </button>
+                        <button type="button" id="cancel-edit-btn" onclick="resetBookForm()" class="hidden border border-neutral-400 text-neutral-600 px-6 py-3 uppercase tracking-widest text-xs hover:border-neutral-800 transition">
+                            Cancel Edit
                         </button>
                     </div>
                 </form>
             </div>
 
             <div class="bg-white border border-gold/30 p-8 shadow-sm">
-                <h2 class="text-2xl font-serif text-darkgold mb-6">Manage & Delete Catalog Items</h2>
+                <h2 class="text-2xl font-serif text-darkgold mb-6">Manage, Edit & Delete Catalog Items</h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-sm">
                         <thead>
                             <tr class="border-b border-gold/20 text-xs uppercase tracking-widest text-neutral-500">
                                 <th class="py-3 px-4">Title</th>
+                                <th class="py-3 px-4">Type / Price</th>
                                 <th class="py-3 px-4">Status</th>
-                                <th class="py-3 px-4">Payment Link</th>
                                 <th class="py-3 px-4">Upload Date & Time</th>
-                                <th class="py-3 px-4 text-center">Action</th>
+                                <th class="py-3 px-4 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="admin-books-table-body">
@@ -172,7 +191,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBn3wOR0qx8IAi2MeA7ETBxKBP02IqIVz8",
@@ -264,45 +283,121 @@
             }
         };
 
-        window.handleBookUpload = async function(e) {
+        window.togglePricingFields = function() {
+            const pricingType = document.getElementById('book-pricing-type').value;
+            const priceWrapper = document.getElementById('price-field-wrapper');
+            const discountWrapper = document.getElementById('discount-field-wrapper');
+            if (pricingType === 'Free') {
+                priceWrapper.classList.add('hidden');
+                discountWrapper.classList.add('hidden');
+            } else {
+                priceWrapper.classList.remove('hidden');
+                discountWrapper.classList.remove('hidden');
+            }
+        };
+
+        window.handleBookSubmit = async function(e) {
             e.preventDefault();
+            const editId = document.getElementById('edit-book-id').value;
             const title = document.getElementById('book-title').value.trim();
             const imagePath = document.getElementById('book-image').value.trim();
             const description = document.getElementById('book-desc').value.trim();
+            const pricingType = document.getElementById('book-pricing-type').value;
+            const price = pricingType === 'Free' ? 0 : parseFloat(document.getElementById('book-price').value) || 0;
+            const discount = pricingType === 'Free' ? 0 : parseFloat(document.getElementById('book-discount').value) || 0;
             const status = document.getElementById('book-status').value;
             const stockCount = parseInt(document.getElementById('book-stock-count').value) || 0;
             let paymentUrl = document.getElementById('book-payment-url').value.trim();
             const feedback = document.getElementById('upload-feedback');
 
             try {
-                await addDoc(collection(db, "books"), {
-                    title: title,
-                    imagePath: imagePath,
-                    description: description,
-                    status: status,
-                    stockCount: status === 'Out of Stock' ? 0 : stockCount,
-                    paymentUrl: paymentUrl,
-                    createdAt: new Date().toISOString()
-                });
+                if (editId) {
+                    // Update Existing E-Book
+                    const bookRef = doc(db, "books", editId);
+                    await updateDoc(bookRef, {
+                        title: title,
+                        imagePath: imagePath,
+                        description: description,
+                        pricingType: pricingType,
+                        price: price,
+                        discount: discount,
+                        status: status,
+                        stockCount: status === 'Out of Stock' ? 0 : stockCount,
+                        paymentUrl: paymentUrl
+                    });
+                    feedback.className = "mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm";
+                    feedback.innerText = `E-book "${title}" updated successfully!`;
+                } else {
+                    // Upload New E-Book
+                    await addDoc(collection(db, "books"), {
+                        title: title,
+                        imagePath: imagePath,
+                        description: description,
+                        pricingType: pricingType,
+                        price: price,
+                        discount: discount,
+                        status: status,
+                        stockCount: status === 'Out of Stock' ? 0 : stockCount,
+                        paymentUrl: paymentUrl,
+                        createdAt: new Date().toISOString()
+                    });
+                    feedback.className = "mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm";
+                    feedback.innerText = `E-book "${title}" uploaded successfully and published!`;
+                }
 
-                feedback.className = "mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm";
-                feedback.innerText = `E-book "${title}" uploaded successfully and published to the live platform!`;
-                feedback.classList.add('hidden'); // Fix typo to ensure hidden works or remove class
                 feedback.classList.remove('hidden');
-
-                e.target.reset();
-                toggleStockField();
+                resetBookForm();
                 await loadAdminStatsAndData();
 
                 setTimeout(() => {
                     feedback.classList.add('hidden');
                 }, 4000);
             } catch (err) {
-                console.error("Error uploading book:", err);
+                console.error("Error saving book:", err);
                 feedback.className = "mb-6 p-4 bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm";
-                feedback.innerText = "Failed to upload e-book. Please check your database connection.";
+                feedback.innerText = "Failed to save e-book. Please check your database connection.";
                 feedback.classList.remove('hidden');
             }
+        };
+
+        window.editBook = async function(bookId) {
+            try {
+                const docRef = doc(db, "books", bookId);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const b = docSnap.data();
+                    document.getElementById('edit-book-id').value = bookId;
+                    document.getElementById('book-title').value = b.title || '';
+                    document.getElementById('book-image').value = b.imagePath || '';
+                    document.getElementById('book-desc').value = b.description || '';
+                    document.getElementById('book-pricing-type').value = b.pricingType || 'Paid';
+                    document.getElementById('book-price').value = b.price || 0;
+                    document.getElementById('book-discount').value = b.discount || 0;
+                    document.getElementById('book-status').value = b.status || 'Available';
+                    document.getElementById('book-stock-count').value = b.stockCount || 10;
+                    document.getElementById('book-payment-url').value = b.paymentUrl || '';
+
+                    togglePricingFields();
+                    toggleStockField();
+
+                    document.getElementById('form-section-title').innerText = `Edit E-Book: ${b.title}`;
+                    document.getElementById('submit-btn').innerText = 'Update E-Book';
+                    document.getElementById('cancel-edit-btn').classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch (err) {
+                console.error("Error loading book for edit:", err);
+            }
+        };
+
+        window.resetBookForm = function() {
+            document.getElementById('edit-book-id').value = '';
+            document.querySelector('form').reset();
+            document.getElementById('form-section-title').innerText = 'Upload New E-Book';
+            document.getElementById('submit-btn').innerText = 'Publish E-Book';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+            togglePricingFields();
+            toggleStockField();
         };
 
         window.deleteBook = async function(bookId, bookTitle) {
@@ -345,15 +440,16 @@
                             });
                         }
 
-                        let linkDisplay = b.paymentUrl ? `<a href="${b.paymentUrl.startsWith('http') ? b.paymentUrl : 'https://' + b.paymentUrl}" target="_blank" class="text-darkgold underline truncate block max-w-xs">${b.paymentUrl}</a>` : 'N/A';
+                        let priceText = b.pricingType === 'Free' ? 'Free' : `₹${b.price} (${b.discount || 0}% Off)`;
 
                         adminBooksTable.innerHTML += `
                             <tr class="border-b border-gold/10 hover:bg-pearl/60 transition">
                                 <td class="py-3 px-4 font-medium text-neutral-900">${b.title}</td>
+                                <td class="py-3 px-4 text-darkgold font-semibold">${priceText}</td>
                                 <td class="py-3 px-4 text-neutral-600">${b.status}</td>
-                                <td class="py-3 px-4 font-mono text-xs">${linkDisplay}</td>
                                 <td class="py-3 px-4 text-neutral-500 font-mono text-xs">${formattedDate}</td>
-                                <td class="py-3 px-4 text-center">
+                                <td class="py-3 px-4 text-center space-x-2">
+                                    <button onclick="editBook('${bId}')" class="bg-amber-50 border border-gold text-darkgold px-3 py-1 text-xs uppercase tracking-wider hover:bg-gold hover:text-white transition">Edit</button>
                                     <button onclick="deleteBook('${bId}', '${b.title}')" class="bg-red-50 border border-red-300 text-red-600 px-3 py-1 text-xs uppercase tracking-wider hover:bg-red-600 hover:text-white transition">Delete</button>
                                 </td>
                             </tr>
