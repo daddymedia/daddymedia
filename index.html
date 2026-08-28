@@ -21,13 +21,13 @@
 </head>
 <body class="bg-pearl text-neutral-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
+    <!-- Navigation -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gold/20 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <a href="index.html" class="text-xl sm:text-2xl font-serif tracking-wider text-darkgold">HEAVEN STORIES</a>
             
             <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-widest font-medium">
                 <a href="index.html#catalog" class="hover:text-gold transition">Catalog</a>
-                <a href="admin.html" class="hover:text-gold transition text-darkgold font-semibold">Admin Panel</a>
             </nav>
 
             <div class="flex items-center space-x-3 sm:space-x-4">
@@ -49,6 +49,7 @@
         </div>
     </header>
 
+    <!-- Hero Section -->
     <section class="relative bg-gradient-to-b from-white to-pearl py-16 sm:py-24 border-b border-gold/10 px-4">
         <div class="max-w-5xl mx-auto text-center">
             <h1 class="text-3xl sm:text-5xl md:text-6xl font-serif text-neutral-900 mb-6 leading-tight">
@@ -63,6 +64,7 @@
         </div>
     </section>
 
+    <!-- Catalog Section -->
     <main id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex-grow w-full">
         <h2 class="text-2xl sm:text-3xl font-serif text-center mb-12 text-neutral-900">Curated E-Books Collection</h2>
         <div id="book-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -72,6 +74,7 @@
         </div>
     </main>
 
+    <!-- Auth Modal -->
     <div id="auth-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md border border-gold/30 p-8 relative shadow-2xl">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-800 text-xl">&times;</button>
@@ -106,10 +109,12 @@
         </div>
     </div>
 
+    <!-- Footer -->
     <footer class="bg-white border-t border-gold/20 py-8 text-center text-neutral-500 text-sm mt-20">
         <p>&copy; 2026 Heaven Stories India. All rights reserved.</p>
     </footer>
 
+    <!-- Firebase & App Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -161,6 +166,12 @@
                         imageElement = `<span class="text-gold/60 font-serif text-center p-4">NO IMAGE AVAILABLE</span>`;
                     }
 
+                    // Ensure payment URL has correct protocol prefix if user typed domain without https://
+                    let targetUrl = book.paymentUrl || '#';
+                    if (targetUrl !== '#' && !targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+                        targetUrl = 'https://' + targetUrl;
+                    }
+
                     grid.innerHTML += `
                         <div class="bg-white border border-gold/20 p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition">
                             <div>
@@ -176,7 +187,7 @@
                             <div>
                                 ${isOutOfStock ? 
                                     `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs cursor-not-allowed">Out of Stock</button>` :
-                                    `<a href="${book.paymentUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`
+                                    `<a href="${targetUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`
                                 }
                             </div>
                         </div>
@@ -193,6 +204,10 @@
                         let isOutOfStock = book.status === 'Out of Stock';
                         let stockBadge = isOutOfStock ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1">Out of Stock</span>` : `<span class="bg-amber-50 text-darkgold text-xs px-2.5 py-1">Stock: ${book.stockCount || 0}</span>`;
                         let imageTag = (book.imagePath) ? `<img src="${book.imagePath}" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='NO IMAGE AVAILABLE';">` : `NO IMAGE AVAILABLE`;
+                        let fallbackUrl = book.paymentUrl || '#';
+                        if (fallbackUrl !== '#' && !fallbackUrl.startsWith('http://') && !fallbackUrl.startsWith('https://')) {
+                            fallbackUrl = 'https://' + fallbackUrl;
+                        }
                         
                         grid.innerHTML += `
                             <div class="bg-white border border-gold/20 p-6 flex flex-col justify-between shadow-sm">
@@ -202,7 +217,7 @@
                                     <p class="text-neutral-600 text-sm mb-4">${book.description}</p>
                                 </div>
                                 <div>
-                                    ${isOutOfStock ? `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs">Out of Stock</button>` : `<a href="${book.paymentUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`}
+                                    ${isOutOfStock ? `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs">Out of Stock</button>` : `<a href="${fallbackUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`}
                                 </div>
                             </div>
                         `;
