@@ -3,145 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Architecture Input Control Panel | Daddy Media</title>
-    
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS (CDN for instant styling) -->
+    <title>Admin Dashboard | Heaven Stories India</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Custom Tailwind Configuration -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
                     colors: {
-                        primary: '#2563eb', // Blue-600
-                        secondary: '#1e40af', // Blue-800
-                        danger: '#dc2626', // Red-600
-                        dark: '#111827', // Gray-900
+                        gold: '#D4AF37',
+                        darkgold: '#AA820A',
+                        pearl: '#FAFAFA'
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+<body class="bg-pearl text-neutral-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Admin Header -->
-    <header class="bg-dark text-white border-b-4 border-danger shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-3">
-                    <!-- Warning Icon -->
-                    <svg class="w-6 h-6 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    <span class="text-lg font-bold tracking-wide text-gray-100">Daddy Media <span class="text-danger">Core Management Environment</span></span>
-                </div>
-                <nav>
-                    <a href="index.html" class="text-sm text-gray-400 hover:text-white transition">&larr; Back to Public Portal</a>
-                </nav>
+    <header class="bg-white border-b border-gold/20 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="text-xl sm:text-2xl font-serif tracking-wider text-darkgold">HEAVEN STORIES</a>
+                <span class="bg-darkgold text-white text-[10px] uppercase tracking-widest px-2 py-0.5 font-semibold">Admin Panel</span>
+            </div>
+            <div id="admin-header-nav" class="hidden flex items-center space-x-4">
+                <a href="index.html" class="text-xs sm:text-sm uppercase tracking-wider hover:text-darkgold">View Website</a>
+                <button onclick="adminLogout()" class="border border-red-400 text-red-600 px-3 py-1.5 text-xs uppercase tracking-wider hover:bg-red-600 hover:text-white transition">
+                    Logout
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Workspace -->
-    <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-grow w-full">
         
-        <!-- Gatekeeper Loading / Error State -->
-        <div id="admin-gatekeeper-warning" class="max-w-2xl mx-auto">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center animate-pulse">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-danger mb-4"></div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">Identity Validation Check Matrix Running</h2>
-                <p class="text-gray-500">Evaluating operational state profiles against system configurations...</p>
-            </div>
-        </div>
-
-        <!-- Authenticated Admin Workspace -->
-        <div id="admin-workspace" class="hidden">
-            <div class="mb-8 border-b border-gray-200 pb-5">
-                <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Object Injection Framework Engine</h1>
-                <p class="mt-2 text-sm text-gray-500">Authorized Access Level: <span class="text-green-600 font-semibold">Administrator Node</span></p>
-            </div>
+        <div id="admin-login-card" class="max-w-md mx-auto bg-white border border-gold/30 p-8 shadow-sm">
+            <h2 class="text-2xl font-serif text-darkgold mb-2 text-center">Admin Portal</h2>
+            <p class="text-xs text-neutral-500 uppercase tracking-widest text-center mb-6">Restricted Access</p>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                <!-- Add Job Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-lg font-bold text-gray-900">Inject New Job Profile Record</h2>
-                    </div>
-                    <div class="p-6 space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Position Label</label>
-                            <input type="text" id="job-title-in" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Corporate Organization Name</label>
-                            <input type="text" id="job-company-in" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Category Space Descriptor</label>
-                            <input type="text" id="job-cat-in" placeholder="e.g. Engineering, Design..." class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Location Topology Node</label>
-                            <input type="text" id="job-loc-in" placeholder="e.g. Remote, New York..." class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
-                        </div>
-                        <button id="commit-job-btn" class="w-full mt-2 bg-primary hover:bg-secondary text-white font-medium py-3 px-4 rounded-md transition duration-200 shadow-sm flex justify-center items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                            Execute Collection Append Directive
-                        </button>
-                    </div>
-                </div>
+            <div id="admin-login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs"></div>
 
-                <!-- Add Internship Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-lg font-bold text-gray-900">Inject New Internship Profile Record</h2>
-                    </div>
-                    <div class="p-6 space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Intern Role Title</label>
-                            <input type="text" id="int-title-in" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Firm Identifier</label>
-                            <input type="text" id="int-comp-in" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Duration Metrics Horizon</label>
-                            <input type="text" id="int-dur-in" placeholder="e.g. 3 Months" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Compensation Category Selection</label>
-                            <select id="int-stipend-in" class="w-full rounded-md border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition">
-                                <option value="paid">Paid Matrix Target</option>
-                                <option value="unpaid">Academic Non-Compensated Loop</option>
-                            </select>
-                        </div>
-                        <button id="commit-int-btn" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-md transition duration-200 shadow-sm flex justify-center items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            Execute Secondary Document Append
-                        </button>
-                    </div>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Admin ID</label>
+                    <input type="text" id="admin-id-input" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Enter Admin ID">
                 </div>
-
-            </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Password</label>
+                    <input type="password" id="admin-pass-input" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Enter Password">
+                </div>
+                <button type="submit" class="w-full bg-darkgold text-white py-3 uppercase tracking-widest text-xs hover:bg-gold transition mt-2">
+                    Access Dashboard
+                </button>
+            </form>
         </div>
+
+        <div id="admin-dashboard-view" class="hidden space-y-12">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="bg-white border border-gold/30 p-6 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-neutral-500 mb-1">Total User Accounts</p>
+                        <h3 id="stat-total-accounts" class="text-3xl font-serif text-darkgold">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-pearl border border-gold/20 flex items-center justify-center text-darkgold font-serif text-xl">👥</div>
+                </div>
+                <div class="bg-white border border-gold/30 p-6 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-neutral-500 mb-1">Total E-Books Listed</p>
+                        <h3 id="stat-total-books" class="text-3xl font-serif text-darkgold">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-pearl border border-gold/20 flex items-center justify-center text-darkgold font-serif text-xl">📚</div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gold/30 p-8 shadow-sm">
+                <h2 class="text-2xl font-serif text-darkgold mb-6">Upload New E-Book</h2>
+                
+                <div id="upload-feedback" class="hidden mb-6 p-4 text-xs sm:text-sm"></div>
+
+                <form onsubmit="handleBookUpload(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">E-Book Title *</label>
+                        <input type="text" id="book-title" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. The Golden Horizon">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Image Path (GitHub Repo) *</label>
+                        <input type="text" id="book-image" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. images/quitehearts.jpg">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Description *</label>
+                        <textarea id="book-desc" rows="3" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Write a summary description of the e-book..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Stock Status *</label>
+                        <select id="book-status" onchange="toggleStockField()" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl">
+                            <option value="Available">Available (No. of Stocks Left)</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                        </select>
+                    </div>
+                    <div id="stock-count-wrapper">
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">No. of Stocks Left *</label>
+                        <input type="number" id="book-stock-count" min="0" value="10" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. 15">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Buy Now Payment Link URL *</label>
+                        <input type="url" id="book-payment-url" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="https://paymentgateway.com/pay/...">
+                    </div>
+                    <div class="md:col-span-2">
+                        <button type="submit" class="bg-darkgold text-white px-8 py-3 uppercase tracking-widest text-xs hover:bg-gold transition shadow-sm">
+                            Publish E-Book
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-white border border-gold/30 p-8 shadow-sm">
+                <h2 class="text-2xl font-serif text-darkgold mb-6">User Accounts & Activity Tracker</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-gold/20 text-xs uppercase tracking-widest text-neutral-500">
+                                <th class="py-3 px-4">Name</th>
+                                <th class="py-3 px-4">Email ID</th>
+                                <th class="py-3 px-4">Password</th>
+                                <th class="py-3 px-4 text-center">Buy Now Clicks</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <tr>
+                                <td colspan="4" class="py-6 text-center text-neutral-400">Loading user profiles...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
     </main>
 
-    <!-- Firebase Logic -->
+    <footer class="bg-white border-t border-gold/20 py-8 text-center text-neutral-500 text-sm mt-20">
+        <p>&copy; 2026 Heaven Stories India. All rights reserved. Admin Dashboard.</p>
+    </footer>
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyBn3w0R0qx8IA2MeAZETBxKBP02IqIVz8",
+            apiKey: "AIzaSyBn3wOR0qx8IAi2MeA7ETBxKBP02IqIVz8",
             authDomain: "daddy-media.firebaseapp.com",
             projectId: "daddy-media",
             storageBucket: "daddy-media.firebasestorage.app",
@@ -151,83 +163,128 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getFirestore(app);
+        window.db = db;
 
-        onAuthStateChanged(auth, (user) => {
-            // Free-tier architectural gatekeeper mapping validation logic
-            const gatekeeper = document.getElementById('admin-gatekeeper-warning');
-            const workspace = document.getElementById('admin-workspace');
+        // Admin Authentication Handling
+        window.handleAdminLogin = function(e) {
+            e.preventDefault();
+            const idInput = document.getElementById('admin-id-input').value.trim();
+            const passInput = document.getElementById('admin-pass-input').value;
+            const errDiv = document.getElementById('admin-login-error');
 
-            if(user && user.email === 'admin@daddymedia.site') {
-                gatekeeper.classList.add('hidden');
-                workspace.classList.remove('hidden');
+            if (idInput === "DMADMIN" && passInput === "29102007") {
+                localStorage.setItem('hs_admin_logged', 'true');
+                renderAdminDashboard();
             } else {
-                gatekeeper.classList.remove('animate-pulse');
-                gatekeeper.innerHTML = `
-                    <div class="bg-red-50 border-l-4 border-danger p-6 text-left rounded-r-md shadow-sm">
-                        <h2 class="text-xl font-bold text-red-800 mb-2 flex items-center gap-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                            Access Authorization Failure Matrix Triggered
-                        </h2>
-                        <p class="text-red-700 text-sm leading-relaxed mb-4">Your validated security account token identity does not match the platform structural root verification schema required for administrative control operations.</p>
-                        <button onclick="window.location.href='index.html'" class="bg-red-100 hover:bg-red-200 text-red-800 font-medium py-2 px-4 rounded transition text-sm">
-                            Abort Sequence & Return to Public Portal
-                        </button>
-                    </div>
-                `;
+                errDiv.innerText = "Invalid Admin ID or Password. Please verify credentials.";
+                errDiv.classList.remove('hidden');
             }
-        });
+        };
 
-        // Job Submission
-        document.getElementById('commit-job-btn').addEventListener('click', async () => {
-            const btn = document.getElementById('commit-job-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = 'Executing...';
-            btn.disabled = true;
+        window.adminLogout = function() {
+            localStorage.removeItem('hs_admin_logged');
+            window.location.reload();
+        };
+
+        window.renderAdminDashboard = async function() {
+            document.getElementById('admin-login-card').classList.add('hidden');
+            document.getElementById('admin-dashboard-view').classList.remove('hidden');
+            document.getElementById('admin-header-nav').classList.remove('hidden');
+
+            await loadAdminStatsAndData();
+        };
+
+        window.toggleStockField = function() {
+            const status = document.getElementById('book-status').value;
+            const wrapper = document.getElementById('stock-count-wrapper');
+            if (status === 'Out of Stock') {
+                wrapper.classList.add('opacity-40', 'pointer-events-none');
+            } else {
+                wrapper.classList.remove('opacity-40', 'pointer-events-none');
+            }
+        };
+
+        // Handle Book Upload via Admin Panel
+        window.handleBookUpload = async function(e) {
+            e.preventDefault();
+            const title = document.getElementById('book-title').value.trim();
+            const imagePath = document.getElementById('book-image').value.trim();
+            const description = document.getElementById('book-desc').value.trim();
+            const status = document.getElementById('book-status').value;
+            const stockCount = parseInt(document.getElementById('book-stock-count').value) || 0;
+            const paymentUrl = document.getElementById('book-payment-url').value.trim();
+            const feedback = document.getElementById('upload-feedback');
 
             try {
-                await addDoc(collection(db, "jobs"), {
-                    title: document.getElementById('job-title-in').value,
-                    company: document.getElementById('job-company-in').value,
-                    category: document.getElementById('job-cat-in').value,
-                    location: document.getElementById('job-loc-in').value,
-                    timestamp: new Date()
+                await addDoc(collection(db, "books"), {
+                    title: title,
+                    imagePath: imagePath,
+                    description: description,
+                    status: status,
+                    stockCount: status === 'Out of Stock' ? 0 : stockCount,
+                    paymentUrl: paymentUrl,
+                    createdAt: new Date().toISOString()
                 });
-                alert('Job object initialized successfully.');
-                // Clear inputs
-                ['job-title-in', 'job-company-in', 'job-cat-in', 'job-loc-in'].forEach(id => document.getElementById(id).value = '');
-            } catch(e) {
-                alert(`Transaction breakdown encountered: ${e.message}`);
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+
+                feedback.className = "mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm";
+                feedback.innerText = `E-book "${title}" uploaded successfully and published to the live platform!`;
+                feedback.classList.remove('hidden');
+
+                // Reset Form
+                e.target.reset();
+                toggleStockField();
+                await loadAdminStatsAndData();
+
+                setTimeout(() => {
+                    feedback.classList.add('hidden');
+                }, 4000);
+            } catch (err) {
+                console.error("Error uploading book:", err);
+                feedback.className = "mb-6 p-4 bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm";
+                feedback.innerText = "Failed to upload e-book. Please check your database connection.";
+                feedback.classList.remove('hidden');
             }
-        });
+        };
 
-        // Internship Submission
-        document.getElementById('commit-int-btn').addEventListener('click', async () => {
-            const btn = document.getElementById('commit-int-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = 'Executing...';
-            btn.disabled = true;
-
+        // Load Admin Analytics & User Table
+        async function loadAdminStatsAndData() {
             try {
-                await addDoc(collection(db, "internships"), {
-                    title: document.getElementById('int-title-in').value,
-                    company: document.getElementById('int-comp-in').value,
-                    duration: document.getElementById('int-dur-in').value,
-                    stipend: document.getElementById('int-stipend-in').value,
-                    timestamp: new Date()
+                // Fetch Books for Count
+                const booksSnap = await getDocs(collection(db, "books"));
+                document.getElementById('stat-total-books').innerText = booksSnap.size;
+
+                // Fetch Users for Table & Account Count
+                const usersSnap = await getDocs(collection(db, "users"));
+                document.getElementById('stat-total-accounts').innerText = usersSnap.size;
+
+                const tableBody = document.getElementById('users-table-body');
+                if (usersSnap.empty) {
+                    tableBody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-neutral-400">No user accounts created yet.</td></tr>`;
+                    return;
+                }
+
+                tableBody.innerHTML = '';
+                usersSnap.forEach((docSnap) => {
+                    const user = docSnap.data();
+                    tableBody.innerHTML += `
+                        <tr class="border-b border-gold/10 hover:bg-pearl/60 transition">
+                            <td class="py-3 px-4 font-medium text-neutral-900">${user.name || 'N/A'}</td>
+                            <td class="py-3 px-4 text-neutral-600">${user.email}</td>
+                            <td class="py-3 px-4 font-mono text-xs text-neutral-500">${user.password}</td>
+                            <td class="py-3 px-4 text-center font-semibold text-darkgold">${user.buyClicks || 0}</td>
+                        </tr>
+                    `;
                 });
-                alert('Internship vector injected successfully.');
-                // Clear inputs
-                ['int-title-in', 'int-comp-in', 'int-dur-in'].forEach(id => document.getElementById(id).value = '');
-            } catch(e) {
-                alert(`Transaction breakdown encountered: ${e.message}`);
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+            } catch (err) {
+                console.error("Error loading admin stats:", err);
+            }
+        }
+
+        // Auto Check Admin Persistence Session
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('hs_admin_logged') === 'true') {
+                renderAdminDashboard();
             }
         });
     </script>
