@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heaven Stories India | Luxury E-Books</title>
+    <title>Admin Dashboard | Heaven Stories India</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,103 +21,157 @@
 </head>
 <body class="bg-pearl text-neutral-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Navigation -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gold/20 shadow-sm">
+    <header class="bg-white border-b border-gold/20 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-            <a href="index.html" class="text-xl sm:text-2xl font-serif tracking-wider text-darkgold">HEAVEN STORIES</a>
-            
-            <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-widest font-medium">
-                <a href="index.html#catalog" class="hover:text-gold transition">Catalog</a>
-            </nav>
-
-            <div class="flex items-center space-x-3 sm:space-x-4">
-                <div id="user-auth-section" class="flex items-center space-x-3">
-                    <button onclick="openAuthModal('login')" class="text-xs sm:text-sm border border-darkgold text-darkgold px-3 sm:px-4 py-2 uppercase tracking-wider hover:bg-darkgold hover:text-white transition">
-                        Login
-                    </button>
-                    <button onclick="openAuthModal('signup')" class="hidden sm:inline-block text-xs sm:text-sm bg-darkgold text-white px-4 py-2 uppercase tracking-wider hover:bg-gold transition">
-                        Create Account
-                    </button>
-                </div>
-                <div id="user-welcome-section" class="hidden flex items-center space-x-3">
-                    <span id="welcome-msg" class="text-xs sm:text-sm font-serif text-darkgold italic"></span>
-                    <button onclick="logoutUser()" class="text-xs border border-neutral-400 text-neutral-600 px-3 py-1.5 uppercase tracking-wider hover:border-red-600 hover:text-red-600 transition">
-                        Logout
-                    </button>
-                </div>
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="text-xl sm:text-2xl font-serif tracking-wider text-darkgold">HEAVEN STORIES</a>
+                <span class="bg-darkgold text-white text-[10px] uppercase tracking-widest px-2 py-0.5 font-semibold">Admin Panel</span>
+            </div>
+            <div id="admin-header-nav" class="hidden flex items-center space-x-4">
+                <a href="index.html" class="text-xs sm:text-sm uppercase tracking-wider hover:text-darkgold">View Website</a>
+                <button onclick="adminLogout()" class="border border-red-400 text-red-600 px-3 py-1.5 text-xs uppercase tracking-wider hover:bg-red-600 hover:text-white transition">
+                    Logout
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-b from-white to-pearl py-16 sm:py-24 border-b border-gold/10 px-4">
-        <div class="max-w-5xl mx-auto text-center">
-            <h1 class="text-3xl sm:text-5xl md:text-6xl font-serif text-neutral-900 mb-6 leading-tight">
-                Timeless Tales, <span class="text-darkgold italic">Digitally Bound</span>
-            </h1>
-            <p class="text-neutral-600 text-base sm:text-xl max-w-2xl mx-auto mb-10 font-light">
-                Discover our exclusive curated collection of digital literature celebrating heritage, fiction, and spiritual journeys.
-            </p>
-            <a href="#catalog" class="inline-block bg-darkgold text-white px-8 py-4 uppercase tracking-widest text-sm hover:bg-gold transition shadow-sm">
-                Explore Catalog
-            </a>
-        </div>
-    </section>
-
-    <!-- Catalog Section -->
-    <main id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex-grow w-full">
-        <h2 class="text-2xl sm:text-3xl font-serif text-center mb-12 text-neutral-900">Curated E-Books Collection</h2>
-        <div id="book-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="col-span-full text-center text-neutral-400 py-12 font-serif text-lg">
-                Loading exquisite literature...
-            </div>
-        </div>
-    </main>
-
-    <!-- Auth Modal -->
-    <div id="auth-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md border border-gold/30 p-8 relative shadow-2xl">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-800 text-xl">&times;</button>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-grow w-full">
+        
+        <div id="admin-login-card" class="max-w-md mx-auto bg-white border border-gold/30 p-8 shadow-sm">
+            <h2 class="text-2xl font-serif text-darkgold mb-2 text-center">Admin Portal</h2>
+            <p class="text-xs text-neutral-500 uppercase tracking-widest text-center mb-6">Backend Secured Access</p>
             
-            <div id="modal-title" class="text-2xl font-serif text-darkgold mb-6 text-center">Welcome Back</div>
-            
-            <div id="auth-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs sm:text-sm"></div>
-            <div id="auth-success" class="hidden mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs sm:text-sm"></div>
+            <div id="admin-login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs"></div>
 
-            <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-                <div id="name-field-container" class="hidden">
-                    <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Full Name</label>
-                    <input type="text" id="auth-name" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Enter your full name">
-                </div>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Email Address</label>
-                    <input type="email" id="auth-email" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="name@example.com">
+                    <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Admin ID</label>
+                    <input type="text" id="admin-id-input" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Enter Admin ID">
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Password</label>
-                    <input type="password" id="auth-password" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="At least 6 characters">
+                    <input type="password" id="admin-pass-input" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Enter Password">
                 </div>
-                <button type="submit" id="auth-submit-btn" class="w-full bg-darkgold text-white py-3 uppercase tracking-widest text-xs hover:bg-gold transition mt-2">
-                    Login
+                <button type="submit" id="admin-login-btn" class="w-full bg-darkgold text-white py-3 uppercase tracking-widest text-xs hover:bg-gold transition mt-2">
+                    Access Dashboard
                 </button>
             </form>
-
-            <div class="mt-6 text-center text-xs text-neutral-500">
-                <span id="switch-text">New to Heaven Stories?</span> 
-                <button onclick="toggleAuthMode()" id="switch-btn" class="text-darkgold font-semibold underline ml-1">Create Account</button>
-            </div>
         </div>
-    </div>
 
-    <!-- Footer -->
+        <div id="admin-dashboard-view" class="hidden space-y-12">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="bg-white border border-gold/30 p-6 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-neutral-500 mb-1">Total User Accounts</p>
+                        <h3 id="stat-total-accounts" class="text-3xl font-serif text-darkgold">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-pearl border border-gold/20 flex items-center justify-center text-darkgold font-serif text-xl">👥</div>
+                </div>
+                <div class="bg-white border border-gold/30 p-6 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-neutral-500 mb-1">Total E-Books Listed</p>
+                        <h3 id="stat-total-books" class="text-3xl font-serif text-darkgold">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-pearl border border-gold/20 flex items-center justify-center text-darkgold font-serif text-xl">📚</div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gold/30 p-8 shadow-sm">
+                <h2 class="text-2xl font-serif text-darkgold mb-6">Upload New E-Book</h2>
+                
+                <div id="upload-feedback" class="hidden mb-6 p-4 text-xs sm:text-sm"></div>
+
+                <form onsubmit="handleBookUpload(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">E-Book Title *</label>
+                        <input type="text" id="book-title" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. The Golden Horizon">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Image Path (GitHub Repo) *</label>
+                        <input type="text" id="book-image" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. images/quitehearts.jpg">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Description *</label>
+                        <textarea id="book-desc" rows="3" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Write a summary description of the e-book..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Stock Status *</label>
+                        <select id="book-status" onchange="toggleStockField()" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl">
+                            <option value="Available">Available (No. of Stocks Left)</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                        </select>
+                    </div>
+                    <div id="stock-count-wrapper">
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">No. of Stocks Left *</label>
+                        <input type="number" id="book-stock-count" min="0" value="10" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="e.g. 15">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Buy Now Payment Link URL *</label>
+                        <input type="text" id="book-payment-url" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="https://paymentgateway.com/pay/...">
+                    </div>
+                    <div class="md:col-span-2">
+                        <button type="submit" class="bg-darkgold text-white px-8 py-3 uppercase tracking-widest text-xs hover:bg-gold transition shadow-sm">
+                            Publish E-Book
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-white border border-gold/30 p-8 shadow-sm">
+                <h2 class="text-2xl font-serif text-darkgold mb-6">Manage & Delete Catalog Items</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-gold/20 text-xs uppercase tracking-widest text-neutral-500">
+                                <th class="py-3 px-4">Title</th>
+                                <th class="py-3 px-4">Status</th>
+                                <th class="py-3 px-4">Upload Date & Time</th>
+                                <th class="py-3 px-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-books-table-body">
+                            <tr>
+                                <td colspan="4" class="py-6 text-center text-neutral-400">Loading catalog items...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gold/30 p-8 shadow-sm">
+                <h2 class="text-2xl font-serif text-darkgold mb-6">User Accounts & Activity Tracker</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-gold/20 text-xs uppercase tracking-widest text-neutral-500">
+                                <th class="py-3 px-4">Name</th>
+                                <th class="py-3 px-4">Email ID</th>
+                                <th class="py-3 px-4">Password</th>
+                                <th class="py-3 px-4 text-center">Buy Now Clicks</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <tr>
+                                <td colspan="4" class="py-6 text-center text-neutral-400">Loading user profiles...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
     <footer class="bg-white border-t border-gold/20 py-8 text-center text-neutral-500 text-sm mt-20">
-        <p>&copy; 2026 Heaven Stories India. All rights reserved.</p>
+        <p>&copy; 2026 Heaven Stories India. All rights reserved. Admin Dashboard.</p>
     </footer>
 
-    <!-- Firebase & App Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBn3wOR0qx8IAi2MeA7ETBxKBP02IqIVz8",
@@ -133,277 +187,206 @@
         const db = getFirestore(app);
         window.db = db;
 
-        let isSignupMode = false;
+        window.handleAdminLogin = async function(e) {
+            e.preventDefault();
+            const idInput = document.getElementById('admin-id-input').value.trim();
+            const passInput = document.getElementById('admin-pass-input').value;
+            const errDiv = document.getElementById('admin-login-error');
+            const submitBtn = document.getElementById('admin-login-btn');
 
-        window.loadFrontendBooks = async function() {
-            const grid = document.getElementById('book-grid');
+            errDiv.classList.add('hidden');
+            submitBtn.innerText = "Verifying...";
+            submitBtn.disabled = true;
+
+            if (idInput === "DMADMIN" && passInput === "292007") {
+                localStorage.setItem('hs_admin_logged', 'true');
+                renderAdminDashboard();
+                return;
+            }
+
             try {
-                const q = query(collection(db, "books"), orderBy("createdAt", "desc"));
-                const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    grid.innerHTML = '<div class="col-span-full text-center text-neutral-400 py-12 font-serif text-lg">No e-books available at the moment. Please check back later.</div>';
-                    return;
-                }
+                const querySnapshot = await getDocs(collection(db, "adminConfig"));
+                let verified = false;
 
-                grid.innerHTML = '';
-                querySnapshot.forEach((bookDoc) => {
-                    const book = bookDoc.data();
-                    const bookId = bookDoc.id;
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const storedId = data.adminId || data.ID;
+                    const storedPass = data.adminPassword || data.PASSWORD;
 
-                    let stockBadge = '';
-                    let isOutOfStock = book.status === 'Out of Stock';
-                    if (isOutOfStock) {
-                        stockBadge = `<span class="bg-red-100 text-red-700 border border-red-300 text-xs uppercase px-2.5 py-1 tracking-wider font-medium">Out of Stock</span>`;
-                    } else {
-                        stockBadge = `<span class="bg-amber-50 text-darkgold border border-gold/40 text-xs uppercase px-2.5 py-1 tracking-wider font-medium">Stocks Left: ${book.stockCount || 0}</span>`;
+                    if (idInput === storedId && passInput === storedPass) {
+                        verified = true;
                     }
-
-                    let imageElement = '';
-                    if (book.imagePath && book.imagePath.trim() !== '') {
-                        imageElement = `<img src="${book.imagePath}" alt="${book.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<span class=\'text-gold/60 font-serif text-center p-4\'>NO IMAGE AVAILABLE</span>';">`;
-                    } else {
-                        imageElement = `<span class="text-gold/60 font-serif text-center p-4">NO IMAGE AVAILABLE</span>`;
-                    }
-
-                    // Ensure payment URL has correct protocol prefix if user typed domain without https://
-                    let targetUrl = book.paymentUrl || '#';
-                    if (targetUrl !== '#' && !targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
-                        targetUrl = 'https://' + targetUrl;
-                    }
-
-                    grid.innerHTML += `
-                        <div class="bg-white border border-gold/20 p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition">
-                            <div>
-                                <div class="h-64 bg-pearl border border-gold/10 mb-6 flex items-center justify-center overflow-hidden relative">
-                                    ${imageElement}
-                                    <div class="absolute top-3 right-3">
-                                        ${stockBadge}
-                                    </div>
-                                </div>
-                                <h3 class="font-serif text-xl mb-1 text-neutral-900">${book.title}</h3>
-                                <p class="text-neutral-600 text-xs sm:text-sm mb-4 line-clamp-3 font-light">${book.description}</p>
-                            </div>
-                            <div>
-                                ${isOutOfStock ? 
-                                    `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs cursor-not-allowed">Out of Stock</button>` :
-                                    `<a href="${targetUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`
-                                }
-                            </div>
-                        </div>
-                    `;
                 });
-            } catch (error) {
-                console.error("Error fetching books:", error);
-                try {
-                    const fallbackSnap = await getDocs(collection(db, "books"));
-                    grid.innerHTML = '';
-                    fallbackSnap.forEach((bookDoc) => {
-                        const book = bookDoc.data();
-                        const bookId = bookDoc.id;
-                        let isOutOfStock = book.status === 'Out of Stock';
-                        let stockBadge = isOutOfStock ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1">Out of Stock</span>` : `<span class="bg-amber-50 text-darkgold text-xs px-2.5 py-1">Stock: ${book.stockCount || 0}</span>`;
-                        let imageTag = (book.imagePath) ? `<img src="${book.imagePath}" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='NO IMAGE AVAILABLE';">` : `NO IMAGE AVAILABLE`;
-                        let fallbackUrl = book.paymentUrl || '#';
-                        if (fallbackUrl !== '#' && !fallbackUrl.startsWith('http://') && !fallbackUrl.startsWith('https://')) {
-                            fallbackUrl = 'https://' + fallbackUrl;
-                        }
-                        
-                        grid.innerHTML += `
-                            <div class="bg-white border border-gold/20 p-6 flex flex-col justify-between shadow-sm">
-                                <div>
-                                    <div class="h-64 bg-pearl border border-gold/10 mb-6 flex items-center justify-center overflow-hidden relative text-gold/60 font-serif">${imageTag}<div class="absolute top-3 right-3">${stockBadge}</div></div>
-                                    <h3 class="font-serif text-xl mb-1">${book.title}</h3>
-                                    <p class="text-neutral-600 text-sm mb-4">${book.description}</p>
-                                </div>
-                                <div>
-                                    ${isOutOfStock ? `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs">Out of Stock</button>` : `<a href="${fallbackUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`}
-                                </div>
-                            </div>
-                        `;
-                    });
-                } catch(e) {
-                    grid.innerHTML = '<div class="col-span-full text-center text-red-500 py-12">Unable to load catalog. Please verify Firestore connectivity.</div>';
+
+                if (verified) {
+                    localStorage.setItem('hs_admin_logged', 'true');
+                    renderAdminDashboard();
+                } else {
+                    errDiv.innerText = "Invalid Admin ID or Password. Please try again.";
+                    errDiv.classList.remove('hidden');
+                    submitBtn.innerText = "Access Dashboard";
+                    submitBtn.disabled = false;
+                }
+            } catch (err) {
+                if (idInput === "DMADMIN" && passInput === "292007") {
+                    localStorage.setItem('hs_admin_logged', 'true');
+                    renderAdminDashboard();
+                } else {
+                    errDiv.innerText = "Invalid Admin ID or Password.";
+                    errDiv.classList.remove('hidden');
+                    submitBtn.innerText = "Access Dashboard";
+                    submitBtn.disabled = false;
                 }
             }
         };
 
-        window.trackBuyClick = async function(bookId) {
-            const currentUserEmail = localStorage.getItem('hs_user_email');
-            if (currentUserEmail) {
-                try {
-                    const usersSnap = await getDocs(collection(db, "users"));
-                    usersSnap.forEach(async (uDoc) => {
-                        if (uDoc.data().email === currentUserEmail) {
-                            const userRef = doc(db, "users", uDoc.id);
-                            const currentClicks = uDoc.data().buyClicks || 0;
-                            await updateDoc(userRef, { buyClicks: currentClicks + 1 });
-                        }
-                    });
-                } catch (err) {
-                    console.error("Error tracking buy click:", err);
-                }
-            }
-        };
-
-        window.checkLoginState = function() {
-            const userName = localStorage.getItem('hs_user_name');
-            const authSection = document.getElementById('user-auth-section');
-            const welcomeSection = document.getElementById('user-welcome-section');
-            const welcomeMsg = document.getElementById('welcome-msg');
-
-            if (userName) {
-                authSection.classList.add('hidden');
-                welcomeSection.classList.remove('hidden');
-                welcomeMsg.innerText = `Welcome Back, ${userName}`;
-            } else {
-                authSection.classList.remove('hidden');
-                welcomeSection.classList.add('hidden');
-            }
-        };
-
-        window.logoutUser = function() {
-            localStorage.removeItem('hs_user_name');
-            localStorage.removeItem('hs_user_email');
-            checkLoginState();
+        window.adminLogout = function() {
+            localStorage.removeItem('hs_admin_logged');
             window.location.reload();
         };
 
-        window.openAuthModal = function(mode) {
-            const modal = document.getElementById('auth-modal');
-            modal.classList.remove('hidden');
-            clearErrors();
-            if (mode === 'signup') {
-                isSignupMode = true;
-                document.getElementById('modal-title').innerText = 'Create Your Account';
-                document.getElementById('name-field-container').classList.remove('hidden');
-                document.getElementById('auth-submit-btn').innerText = 'Create Account';
-                document.getElementById('switch-text').innerText = 'Already have an account?';
-                document.getElementById('switch-btn').innerText = 'Login';
+        window.renderAdminDashboard = async function() {
+            document.getElementById('admin-login-card').classList.add('hidden');
+            document.getElementById('admin-dashboard-view').classList.remove('hidden');
+            document.getElementById('admin-header-nav').classList.remove('hidden');
+
+            await loadAdminStatsAndData();
+        };
+
+        window.toggleStockField = function() {
+            const status = document.getElementById('book-status').value;
+            const wrapper = document.getElementById('stock-count-wrapper');
+            if (status === 'Out of Stock') {
+                wrapper.classList.add('opacity-40', 'pointer-events-none');
             } else {
-                isSignupMode = false;
-                document.getElementById('modal-title').innerText = 'Welcome Back';
-                document.getElementById('name-field-container').classList.add('hidden');
-                document.getElementById('auth-submit-btn').innerText = 'Login';
-                document.getElementById('switch-text').innerText = 'New to Heaven Stories?';
-                document.getElementById('switch-btn').innerText = 'Create Account';
+                wrapper.classList.remove('opacity-40', 'pointer-events-none');
             }
         };
 
-        window.closeAuthModal = function() {
-            document.getElementById('auth-modal').classList.add('hidden');
-        };
-
-        window.toggleAuthMode = function() {
-            openAuthModal(isSignupMode ? 'login' : 'signup');
-        };
-
-        function showError(msg) {
-            const errDiv = document.getElementById('auth-error');
-            errDiv.innerText = msg;
-            errDiv.classList.remove('hidden');
-            document.getElementById('auth-success').classList.add('hidden');
-        }
-
-        function showSuccess(msg) {
-            const succDiv = document.getElementById('auth-success');
-            succDiv.innerText = msg;
-            succDiv.classList.remove('hidden');
-            document.getElementById('auth-error').classList.add('hidden');
-        }
-
-        function clearErrors() {
-            document.getElementById('auth-error').classList.add('hidden');
-            document.getElementById('auth-success').classList.add('hidden');
-        }
-
-        window.handleAuthSubmit = async function(e) {
+        window.handleBookUpload = async function(e) {
             e.preventDefault();
-            clearErrors();
-            const email = document.getElementById('auth-email').value.trim();
-            const password = document.getElementById('auth-password').value;
-            const name = document.getElementById('auth-name').value.trim();
+            const title = document.getElementById('book-title').value.trim();
+            const imagePath = document.getElementById('book-image').value.trim();
+            const description = document.getElementById('book-desc').value.trim();
+            const status = document.getElementById('book-status').value;
+            const stockCount = parseInt(document.getElementById('book-stock-count').value) || 0;
+            let paymentUrl = document.getElementById('book-payment-url').value.trim();
+            const feedback = document.getElementById('upload-feedback');
 
-            if (isSignupMode) {
-                if (!name) {
-                    showError("Please enter your full name.");
-                    return;
-                }
-                if (password.length < 6) {
-                    showError("Password must be at least 6 characters long.");
-                    return;
-                }
+            try {
+                await addDoc(collection(db, "books"), {
+                    title: title,
+                    imagePath: imagePath,
+                    description: description,
+                    status: status,
+                    stockCount: status === 'Out of Stock' ? 0 : stockCount,
+                    paymentUrl: paymentUrl,
+                    createdAt: new Date().toISOString()
+                });
+
+                feedback.className = "mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm";
+                feedback.innerText = `E-book "${title}" uploaded successfully and published to the live platform!`;
+                feedback.classList.remove('hidden');
+
+                e.target.reset();
+                toggleStockField();
+                await loadAdminStatsAndData();
+
+                setTimeout(() => {
+                    feedback.classList.add('hidden');
+                }, 4000);
+            } catch (err) {
+                console.error("Error uploading book:", err);
+                feedback.className = "mb-6 p-4 bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm";
+                feedback.innerText = "Failed to upload e-book. Please check your database connection.";
+                feedback.classList.remove('hidden');
+            }
+        };
+
+        window.deleteBook = async function(bookId, bookTitle) {
+            if (confirm(`Are you sure you want to delete "${bookTitle}" from the website catalog?`)) {
                 try {
-                    const usersSnap = await getDocs(collection(db, "users"));
-                    let exists = false;
-                    usersSnap.forEach((docSnap) => {
-                        if (docSnap.data().email === email) {
-                            exists = true;
-                        }
-                    });
-
-                    if (exists) {
-                        showError("An account with this email already exists. Please login.");
-                        return;
-                    }
-
-                    await addDoc(collection(db, "users"), {
-                        name: name,
-                        email: email,
-                        password: password,
-                        buyClicks: 0,
-                        createdAt: new Date().toISOString()
-                    });
-
-                    showSuccess("Account created successfully! Logging you in...");
-                    localStorage.setItem('hs_user_name', name);
-                    localStorage.setItem('hs_user_email', email);
-                    setTimeout(() => {
-                        closeAuthModal();
-                        checkLoginState();
-                    }, 1200);
+                    await deleteDoc(doc(db, "books", bookId));
+                    alert(`"${bookTitle}" has been deleted successfully.`);
+                    await loadAdminStatsAndData();
                 } catch (err) {
-                    console.error("Signup error:", err);
-                    showError("Error creating account. Please try again.");
-                }
-            } else {
-                try {
-                    const usersSnap = await getDocs(collection(db, "users"));
-                    let foundUser = null;
-                    usersSnap.forEach((docSnap) => {
-                        const userData = docSnap.data();
-                        if (userData.email === email) {
-                            foundUser = userData;
-                        }
-                    });
-
-                    if (!foundUser) {
-                        showError("No account found with this email ID. Please create an account.");
-                        return;
-                    }
-
-                    if (foundUser.password !== password) {
-                        showError("Incorrect password. Please try again.");
-                        return;
-                    }
-
-                    showSuccess(`Welcome back, ${foundUser.name}!`);
-                    localStorage.setItem('hs_user_name', foundUser.name);
-                    localStorage.setItem('hs_user_email', foundUser.email);
-                    setTimeout(() => {
-                        closeAuthModal();
-                        checkLoginState();
-                    }, 1000);
-                } catch (err) {
-                    console.error("Login error:", err);
-                    showError("Authentication error. Please check connection.");
+                    console.error("Error deleting book:", err);
+                    alert("Failed to delete book. Please check connection.");
                 }
             }
         };
+
+        async function loadAdminStatsAndData() {
+            try {
+                const booksSnap = await getDocs(collection(db, "books"));
+                document.getElementById('stat-total-books').innerText = booksSnap.size;
+
+                const adminBooksTable = document.getElementById('admin-books-table-body');
+                if (booksSnap.empty) {
+                    adminBooksTable.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-neutral-400">No e-books currently published.</td></tr>`;
+                } else {
+                    adminBooksTable.innerHTML = '';
+                    booksSnap.forEach((bookDoc) => {
+                        const b = bookDoc.data();
+                        const bId = bookDoc.id;
+                        
+                        // Format ISO Date & Time to readable local string format
+                        let formattedDate = 'N/A';
+                        if (b.createdAt) {
+                            const dateObj = new Date(b.createdAt);
+                            formattedDate = isNaN(dateObj.getTime()) ? b.createdAt : dateObj.toLocaleString('en-IN', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            });
+                        }
+
+                        adminBooksTable.innerHTML += `
+                            <tr class="border-b border-gold/10 hover:bg-pearl/60 transition">
+                                <td class="py-3 px-4 font-medium text-neutral-900">${b.title}</td>
+                                <td class="py-3 px-4 text-neutral-600">${b.status}</td>
+                                <td class="py-3 px-4 text-neutral-500 font-mono text-xs">${formattedDate}</td>
+                                <td class="py-3 px-4 text-center">
+                                    <button onclick="deleteBook('${bId}', '${b.title}')" class="bg-red-50 border border-red-300 text-red-600 px-3 py-1 text-xs uppercase tracking-wider hover:bg-red-600 hover:text-white transition">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                const usersSnap = await getDocs(collection(db, "users"));
+                document.getElementById('stat-total-accounts').innerText = usersSnap.size;
+
+                const tableBody = document.getElementById('users-table-body');
+                if (usersSnap.empty) {
+                    tableBody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-neutral-400">No user accounts created yet.</td></tr>`;
+                    return;
+                }
+
+                tableBody.innerHTML = '';
+                usersSnap.forEach((docSnap) => {
+                    const user = docSnap.data();
+                    tableBody.innerHTML += `
+                        <tr class="border-b border-gold/10 hover:bg-pearl/60 transition">
+                            <td class="py-3 px-4 font-medium text-neutral-900">${user.name || 'N/A'}</td>
+                            <td class="py-3 px-4 text-neutral-600">${user.email}</td>
+                            <td class="py-3 px-4 font-mono text-xs text-neutral-500">${user.password}</td>
+                            <td class="py-3 px-4 text-center font-semibold text-darkgold">${user.buyClicks || 0}</td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error("Error loading admin stats:", err);
+            }
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadFrontendBooks();
-            checkLoginState();
+            if (localStorage.getItem('hs_admin_logged') === 'true') {
+                renderAdminDashboard();
+            }
         });
     </script>
 </body>
