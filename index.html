@@ -19,33 +19,43 @@
         }
     </script>
 </head>
-<body class="bg-pearl text-neutral-800 font-sans antialiased">
+<body class="bg-pearl text-neutral-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Navigation -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gold/20">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="#" class="text-2xl font-serif tracking-wider text-darkgold">HEAVEN STORIES</a>
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gold/20 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="text-xl sm:text-2xl font-serif tracking-wider text-darkgold">HEAVEN STORIES</a>
+            
             <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-widest font-medium">
-                <a href="#catalog" class="hover:text-gold transition">Catalog</a>
-                <a href="#about" class="hover:text-gold transition">Our Philosophy</a>
-                <a href="#contact" class="hover:text-gold transition">Contact</a>
+                <a href="index.html#catalog" class="hover:text-gold transition">Catalog</a>
+                <a href="admin.html" class="hover:text-gold transition text-darkgold font-semibold">Admin Panel</a>
             </nav>
-            <div class="flex items-center space-x-4">
-                <button onclick="toggleCart()" class="relative border border-gold text-darkgold px-4 py-2 rounded-none hover:bg-gold hover:text-white transition text-sm tracking-wider uppercase">
-                    Cart (<span id="cart-count">0</span>)
-                </button>
+
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <div id="user-auth-section" class="flex items-center space-x-3">
+                    <button onclick="openAuthModal('login')" class="text-xs sm:text-sm border border-darkgold text-darkgold px-3 sm:px-4 py-2 uppercase tracking-wider hover:bg-darkgold hover:text-white transition">
+                        Login
+                    </button>
+                    <button onclick="openAuthModal('signup')" class="hidden sm:inline-block text-xs sm:text-sm bg-darkgold text-white px-4 py-2 uppercase tracking-wider hover:bg-gold transition">
+                        Create Account
+                    </button>
+                </div>
+                <div id="user-welcome-section" class="hidden flex items-center space-x-3">
+                    <span id="welcome-msg" class="text-xs sm:text-sm font-serif text-darkgold italic"></span>
+                    <button onclick="logoutUser()" class="text-xs border border-neutral-400 text-neutral-600 px-3 py-1.5 uppercase tracking-wider hover:border-red-600 hover:text-red-600 transition">
+                        Logout
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-b from-white to-pearl py-24 border-b border-gold/10">
-        <div class="max-w-5xl mx-auto px-6 text-center">
-            <h1 class="text-4xl md:text-6xl font-serif text-neutral-900 mb-6 leading-tight">
+    <section class="relative bg-gradient-to-b from-white to-pearl py-16 sm:py-24 border-b border-gold/10 px-4">
+        <div class="max-w-5xl mx-auto text-center">
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-serif text-neutral-900 mb-6 leading-tight">
                 Timeless Tales, <span class="text-darkgold italic">Digitally Bound</span>
             </h1>
-            <p class="text-neutral-600 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light">
-                Discover an exclusive curated collection of digital literature celebrating heritage, fiction, and spiritual journeys.
+            <p class="text-neutral-600 text-base sm:text-xl max-w-2xl mx-auto mb-10 font-light">
+                Discover our exclusive curated collection of digital literature celebrating heritage, fiction, and spiritual journeys.
             </p>
             <a href="#catalog" class="inline-block bg-darkgold text-white px-8 py-4 uppercase tracking-widest text-sm hover:bg-gold transition shadow-sm">
                 Explore Catalog
@@ -53,93 +63,345 @@
         </div>
     </section>
 
-    <!-- Catalog Section -->
-    <main id="catalog" class="max-w-7xl mx-auto px-6 py-20">
-        <h2 class="text-3xl font-serif text-center mb-16 text-neutral-900">Curated E-Books</h2>
-        <div id="book-grid" class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <!-- Dynamic Books Loaded via JS / Firestore -->
-            <div class="bg-white border border-gold/20 p-6 flex flex-col justify-between shadow-sm">
-                <div>
-                    <div class="h-64 bg-pearl border border-gold/10 mb-6 flex items-center justify-center text-gold/60 font-serif">
-                        [Book Cover]
-                    </div>
-                    <h3 class="font-serif text-xl mb-2">The Golden Horizon</h3>
-                    <p class="text-neutral-500 text-sm mb-4">By A. R. Sharma</p>
-                    <p class="text-darkgold font-semibold mb-6">₹499.00</p>
-                </div>
-                <button onclick="addToCart('The Golden Horizon', 499)" class="w-full border border-darkgold text-darkgold py-3 uppercase tracking-wider text-xs hover:bg-darkgold hover:text-white transition">
-                    Add to Cart
-                </button>
+    <main id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex-grow w-full">
+        <h2 class="text-2xl sm:text-3xl font-serif text-center mb-12 text-neutral-900">Curated E-Books Collection</h2>
+        <div id="book-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full text-center text-neutral-400 py-12 font-serif text-lg">
+                Loading exquisite literature...
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gold/20 py-12 text-center text-neutral-500 text-sm">
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md border border-gold/30 p-8 relative shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-800 text-xl">&times;</button>
+            
+            <div id="modal-title" class="text-2xl font-serif text-darkgold mb-6 text-center">Welcome Back</div>
+            
+            <div id="auth-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs sm:text-sm"></div>
+            <div id="auth-success" class="hidden mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs sm:text-sm"></div>
+
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div id="name-field-container" class="hidden">
+                    <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Full Name</label>
+                    <input type="text" id="auth-name" class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Enter your full name">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Email Address</label>
+                    <input type="email" id="auth-email" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="name@example.com">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Password</label>
+                    <input type="password" id="auth-password" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="At least 6 characters">
+                </div>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-darkgold text-white py-3 uppercase tracking-widest text-xs hover:bg-gold transition mt-2">
+                    Login
+                </button>
+            </form>
+
+            <div class="mt-6 text-center text-xs text-neutral-500">
+                <span id="switch-text">New to Heaven Stories?</span> 
+                <button onclick="toggleAuthMode()" id="switch-btn" class="text-darkgold font-semibold underline ml-1">Create Account</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-gold/20 py-8 text-center text-neutral-500 text-sm mt-20">
         <p>&copy; 2026 Heaven Stories India. All rights reserved.</p>
     </footer>
 
-    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, query, orderBy, doc, updateField, increment, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "heaven-stories-india",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyBn3wOR0qx8IAi2MeA7ETBxKBP02IqIVz8",
+            authDomain: "daddy-media.firebaseapp.com",
+            projectId: "daddy-media",
+            storageBucket: "daddy-media.firebasestorage.app",
+            messagingSenderId: "13022563374",
+            appId: "1:13022563374:web:1123e9bec9d49d192823bf",
+            measurementId: "G-LWX8MJ7SW5"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        window.db = db;
 
-        async function loadBooks() {
+        let isSignupMode = false;
+
+        // Load Books from Firestore (Latest to Oldest via createdAt or fallback order)
+        window.loadFrontendBooks = async function() {
+            const grid = document.getElementById('book-grid');
             try {
-                const querySnapshot = await getDocs(collection(db, "books"));
-                const grid = document.getElementById('book-grid');
-                if(!querySnapshot.empty) {
+                const q = query(collection(db, "books"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                if (querySnapshot.empty) {
+                    grid.innerHTML = '<div class="col-span-full text-center text-neutral-400 py-12 font-serif text-lg">No e-books available at the moment. Please check back later.</div>';
+                    return;
+                }
+
+                grid.innerHTML = '';
+                querySnapshot.forEach((bookDoc) => {
+                    const book = bookDoc.data();
+                    const bookId = bookDoc.id;
+
+                    // Handle Stock Status Styling & Label
+                    let stockBadge = '';
+                    let isOutOfStock = book.status === 'Out of Stock';
+                    if (isOutOfStock) {
+                        stockBadge = `<span class="bg-red-100 text-red-700 border border-red-300 text-xs uppercase px-2.5 py-1 tracking-wider font-medium">Out of Stock</span>`;
+                    } else {
+                        stockBadge = `<span class="bg-amber-50 text-darkgold border border-gold/40 text-xs uppercase px-2.5 py-1 tracking-wider font-medium">Stocks Left: ${book.stockCount || 0}</span>`;
+                    }
+
+                    // Handle Image Fallback
+                    let imageElement = '';
+                    if (book.imagePath && book.imagePath.trim() !== '') {
+                        imageElement = `<img src="${book.imagePath}" alt="${book.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<span class=\'text-gold/60 font-serif text-center p-4\'>NO IMAGE AVAILABLE</span>';">`;
+                    } else {
+                        imageElement = `<span class="text-gold/60 font-serif text-center p-4">NO IMAGE AVAILABLE</span>`;
+                    }
+
+                    grid.innerHTML += `
+                        <div class="bg-white border border-gold/20 p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition">
+                            <div>
+                                <div class="h-64 bg-pearl border border-gold/10 mb-6 flex items-center justify-center overflow-hidden relative">
+                                    ${imageElement}
+                                    <div class="absolute top-3 right-3">
+                                        ${stockBadge}
+                                    </div>
+                                </div>
+                                <h3 class="font-serif text-xl mb-1 text-neutral-900">${book.title}</h3>
+                                <p class="text-neutral-600 text-xs sm:text-sm mb-4 line-clamp-3 font-light">${book.description}</p>
+                            </div>
+                            <div>
+                                ${isOutOfStock ? 
+                                    `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs cursor-not-allowed">Out of Stock</button>` :
+                                    `<a href="${book.paymentUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`
+                                }
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error("Error fetching books:", error);
+                // Fallback query if index is building
+                try {
+                    const fallbackSnap = await getDocs(collection(db, "books"));
                     grid.innerHTML = '';
-                    querySnapshot.forEach((doc) => {
-                        const book = doc.data();
+                    fallbackSnap.forEach((bookDoc) => {
+                        const book = bookDoc.data();
+                        const bookId = bookDoc.id;
+                        let isOutOfStock = book.status === 'Out of Stock';
+                        let stockBadge = isOutOfStock ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1">Out of Stock</span>` : `<span class="bg-amber-50 text-darkgold text-xs px-2.5 py-1">Stock: ${book.stockCount || 0}</span>`;
+                        let imageTag = (book.imagePath) ? `<img src="${book.imagePath}" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='NO IMAGE AVAILABLE';">` : `NO IMAGE AVAILABLE`;
+                        
                         grid.innerHTML += `
                             <div class="bg-white border border-gold/20 p-6 flex flex-col justify-between shadow-sm">
                                 <div>
-                                    <div class="h-64 bg-pearl border border-gold/10 mb-6 flex items-center justify-center text-gold/60 font-serif">
-                                        <img src="${book.coverUrl || ''}" alt="${book.title}" class="h-full object-cover"/>
-                                    </div>
-                                    <h3 class="font-serif text-xl mb-2">${book.title}</h3>
-                                    <p class="text-neutral-500 text-sm mb-4">By ${book.author}</p>
-                                    <p class="text-darkgold font-semibold mb-6">₹${book.price}</p>
+                                    <div class="h-64 bg-pearl border border-gold/10 mb-6 flex items-center justify-center overflow-hidden relative text-gold/60 font-serif">${imageTag}<div class="absolute top-3 right-3">${stockBadge}</div></div>
+                                    <h3 class="font-serif text-xl mb-1">${book.title}</h3>
+                                    <p class="text-neutral-600 text-sm mb-4">${book.description}</p>
                                 </div>
-                                <button onclick="addToCart('${book.title}', ${book.price})" class="w-full border border-darkgold text-darkgold py-3 uppercase tracking-wider text-xs hover:bg-darkgold hover:text-white transition">
-                                    Add to Cart
-                                </button>
+                                <div>
+                                    ${isOutOfStock ? `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs">Out of Stock</button>` : `<a href="${book.paymentUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`}
+                                </div>
                             </div>
                         `;
                     });
+                } catch(e) {
+                    grid.innerHTML = '<div class="col-span-full text-center text-red-500 py-12">Unable to load catalog. Please verify Firestore connectivity.</div>';
                 }
-            } catch (e) {
-                console.error("Error loading books from Firestore: ", e);
             }
+        };
+
+        // Track Buy Now Clicks
+        window.trackBuyClick = async function(bookId) {
+            const currentUserEmail = localStorage.getItem('hs_user_email');
+            if (currentUserEmail) {
+                try {
+                    const usersSnap = await getDocs(collection(db, "users"));
+                    usersSnap.forEach(async (uDoc) => {
+                        if (uDoc.data().email === currentUserEmail) {
+                            const userRef = doc(db, "users", uDoc.id);
+                            const currentClicks = uDoc.data().buyClicks || 0;
+                            await updateDoc(userRef, { buyClicks: currentClicks + 1 });
+                        }
+                    });
+                } catch (err) {
+                    console.error("Error tracking buy click:", err);
+                }
+            }
+        };
+
+        // Check Logged-in State on Load
+        window.checkLoginState = function() {
+            const userName = localStorage.getItem('hs_user_name');
+            const authSection = document.getElementById('user-auth-section');
+            const welcomeSection = document.getElementById('user-welcome-section');
+            const welcomeMsg = document.getElementById('welcome-msg');
+
+            if (userName) {
+                authSection.classList.add('hidden');
+                welcomeSection.classList.remove('hidden');
+                welcomeMsg.innerText = `Welcome Back, ${userName}`;
+            } else {
+                authSection.classList.remove('hidden');
+                welcomeSection.classList.add('hidden');
+            }
+        };
+
+        window.logoutUser = function() {
+            localStorage.removeItem('hs_user_name');
+            localStorage.removeItem('hs_user_email');
+            checkLoginState();
+            window.location.reload();
+        };
+
+        // Modal Controls
+        window.openAuthModal = function(mode) {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.remove('hidden');
+            clearErrors();
+            if (mode === 'signup') {
+                isSignupMode = true;
+                document.getElementById('modal-title').innerText = 'Create Your Account';
+                document.getElementById('name-field-container').classList.remove('hidden');
+                document.getElementById('auth-submit-btn').innerText = 'Create Account';
+                document.getElementById('switch-text').innerText = 'Already have an account?';
+                document.getElementById('switch-btn').innerText = 'Login';
+            } else {
+                isSignupMode = false;
+                document.getElementById('modal-title').innerText = 'Welcome Back';
+                document.getElementById('name-field-container').classList.add('hidden');
+                document.getElementById('auth-submit-btn').innerText = 'Login';
+                document.getElementById('switch-text').innerText = 'New to Heaven Stories?';
+                document.getElementById('switch-btn').innerText = 'Create Account';
+            }
+        };
+
+        window.closeAuthModal = function() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        };
+
+        window.toggleAuthMode = function() {
+            openAuthModal(isSignupMode ? 'login' : 'signup');
+        };
+
+        function showError(msg) {
+            const errDiv = document.getElementById('auth-error');
+            errDiv.innerText = msg;
+            errDiv.classList.remove('hidden');
+            document.getElementById('auth-success').classList.add('hidden');
         }
 
-        // Uncomment when Firestore credentials are added
-        // loadBooks();
-    </script>
+        function showSuccess(msg) {
+            const succDiv = document.getElementById('auth-success');
+            succDiv.innerText = msg;
+            succDiv.classList.remove('hidden');
+            document.getElementById('auth-error').classList.add('hidden');
+        }
 
-    <script>
-        let cartCount = 0;
-        function addToCart(title, price) {
-            cartCount++;
-            document.getElementById('cart-count').innerText = cartCount;
-            alert(`"${title}" added to your cart.`);
+        function clearErrors() {
+            document.getElementById('auth-error').classList.add('hidden');
+            document.getElementById('auth-success').classList.add('hidden');
         }
-        function toggleCart() {
-            alert(`You have ${cartCount} item(s) in your cart.`);
-        }
+
+        // Handle Signup / Login Form Submission with Firestore Verification
+        window.handleAuthSubmit = async function(e) {
+            e.preventDefault();
+            clearErrors();
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value;
+            const name = document.getElementById('auth-name').value.trim();
+
+            if (isSignupMode) {
+                if (!name) {
+                    showError("Please enter your full name.");
+                    return;
+                }
+                if (password.length < 6) {
+                    showError("Password must be at least 6 characters long.");
+                    return;
+                }
+                try {
+                    // Check if account already exists
+                    const usersSnap = await getDocs(collection(db, "users"));
+                    let exists = false;
+                    usersSnap.forEach((docSnap) => {
+                        if (docSnap.data().email === email) {
+                            exists = true;
+                        }
+                    });
+
+                    if (exists) {
+                        showError("An account with this email already exists. Please login.");
+                        return;
+                    }
+
+                    // Create Account in Firestore
+                    await addDoc(collection(db, "users"), {
+                        name: name,
+                        email: email,
+                        password: password,
+                        buyClicks: 0,
+                        createdAt: new Date().toISOString()
+                    });
+
+                    showSuccess("Account created successfully! Logging you in...");
+                    localStorage.setItem('hs_user_name', name);
+                    localStorage.setItem('hs_user_email', email);
+                    setTimeout(() => {
+                        closeAuthModal();
+                        checkLoginState();
+                    }, 1200);
+                } catch (err) {
+                    console.error("Signup error:", err);
+                    showError("Error creating account. Please try again.");
+                }
+            } else {
+                // Login Mode
+                try {
+                    const usersSnap = await getDocs(collection(db, "users"));
+                    let foundUser = null;
+                    usersSnap.forEach((docSnap) => {
+                        const userData = docSnap.data();
+                        if (userData.email === email) {
+                            foundUser = userData;
+                        }
+                    });
+
+                    if (!foundUser) {
+                        showError("No account found with this email ID. Please create an account.");
+                        return;
+                    }
+
+                    if (foundUser.password !== password) {
+                        showError("Incorrect password. Please try again.");
+                        return;
+                    }
+
+                    showSuccess(`Welcome back, ${foundUser.name}!`);
+                    localStorage.setItem('hs_user_name', foundUser.name);
+                    localStorage.setItem('hs_user_email', foundUser.email);
+                    setTimeout(() => {
+                        closeAuthModal();
+                        checkLoginState();
+                    }, 1000);
+                } catch (err) {
+                    console.error("Login error:", err);
+                    showError("Authentication error. Please check connection.");
+                }
+            }
+        };
+
+        // Initialize Page Data on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFrontendBooks();
+            checkLoginState();
+        });
     </script>
 </body>
 </html>
