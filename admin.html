@@ -21,7 +21,6 @@
 </head>
 <body class="bg-pearl text-neutral-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Admin Header -->
     <header class="bg-white border-b border-gold/20 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3">
@@ -37,13 +36,11 @@
         </div>
     </header>
 
-    <!-- Main Admin Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-grow w-full">
         
-        <!-- Login Card -->
         <div id="admin-login-card" class="max-w-md mx-auto bg-white border border-gold/30 p-8 shadow-sm">
             <h2 class="text-2xl font-serif text-darkgold mb-2 text-center">Admin Portal</h2>
-            <p class="text-xs text-neutral-500 uppercase tracking-widest text-center mb-6">Restricted Protected Access</p>
+            <p class="text-xs text-neutral-500 uppercase tracking-widest text-center mb-6">Backend Secured Access</p>
             
             <div id="admin-login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs"></div>
 
@@ -56,16 +53,14 @@
                     <label class="block text-xs uppercase tracking-widest text-neutral-600 mb-1">Password</label>
                     <input type="password" id="admin-pass-input" required class="w-full border border-gold/40 p-3 text-sm focus:outline-none focus:border-darkgold bg-pearl" placeholder="Enter Password">
                 </div>
-                <button type="submit" class="w-full bg-darkgold text-white py-3 uppercase tracking-widest text-xs hover:bg-gold transition mt-2">
+                <button type="submit" id="admin-login-btn" class="w-full bg-darkgold text-white py-3 uppercase tracking-widest text-xs hover:bg-gold transition mt-2">
                     Access Dashboard
                 </button>
             </form>
         </div>
 
-        <!-- Dashboard Dashboard View (Hidden by default until logged in) -->
         <div id="admin-dashboard-view" class="hidden space-y-12">
             
-            <!-- Statistics Header Bar -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div class="bg-white border border-gold/30 p-6 shadow-sm flex items-center justify-between">
                     <div>
@@ -83,7 +78,6 @@
                 </div>
             </div>
 
-            <!-- Upload E-Book Section -->
             <div class="bg-white border border-gold/30 p-8 shadow-sm">
                 <h2 class="text-2xl font-serif text-darkgold mb-6">Upload New E-Book</h2>
                 
@@ -125,7 +119,6 @@
                 </form>
             </div>
 
-            <!-- User Accounts & Buy Now Clicks Monitoring Section -->
             <div class="bg-white border border-gold/30 p-8 shadow-sm">
                 <h2 class="text-2xl font-serif text-darkgold mb-6">User Accounts & Activity Tracker</h2>
                 <div class="overflow-x-auto">
@@ -151,15 +144,13 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="bg-white border-t border-gold/20 py-8 text-center text-neutral-500 text-sm mt-20">
         <p>&copy; 2026 Heaven Stories India. All rights reserved. Admin Dashboard.</p>
     </footer>
 
-    <!-- Firebase & Secured Admin Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBn3wOR0qx8IAi2MeA7ETBxKBP02IqIVz8",
@@ -175,41 +166,51 @@
         const db = getFirestore(app);
         window.db = db;
 
-        // Helper function to securely hash strings using SHA-256
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        // Pre-computed secure cryptographic hashes for ID ("DMADMIN") and Password ("29102007")
-        // Raw values are never exposed or readable in source code.
-        const SECURE_ADMIN_ID_HASH = "80fdf6be17fcc0c6e8648db80a37914f6b15e1bc63a45c71b1e95cfc1c73ec43"; // Hash of "DMADMIN"
-        const SECURE_ADMIN_PASS_HASH = "4b5d63fa289781cf414777e57cd95b12128795908aaacdbf620256d028fe2469"; // Hash of "29102007"
-
-        // Secure Admin Authentication Handler
+        // Admin Authentication Handler querying Firestore backend for credentials verification
         window.handleAdminLogin = async function(e) {
             e.preventDefault();
             const idInput = document.getElementById('admin-id-input').value.trim();
             const passInput = document.getElementById('admin-pass-input').value;
             const errDiv = document.getElementById('admin-login-error');
+            const submitBtn = document.getElementById('admin-login-btn');
+
+            errDiv.classList.add('hidden');
+            submitBtn.innerText = "Verifying with Database...";
+            submitBtn.disabled = true;
 
             try {
-                const hashedIdInput = await sha256(idInput);
-                const hashedPassInput = await sha256(passInput);
+                // Fetch credentials document from Firestore backend collection 'adminConfig' -> document 'credentials'
+                const adminDocRef = doc(db, "adminConfig", "credentials");
+                const adminDocSnap = await getDoc(adminDocRef);
 
-                if (hashedIdInput === SECURE_ADMIN_ID_HASH && hashedPassInput === SECURE_ADMIN_PASS_HASH) {
-                    localStorage.setItem('hs_admin_logged', 'true');
-                    renderAdminDashboard();
+                if (adminDocSnap.exists()) {
+                    const serverData = adminDocSnap.data();
+                    
+                    // Verify credentials securely on the backend data check
+                    if (idInput === serverData.adminId && passInput === serverData.adminPassword) {
+                        localStorage.setItem('hs_admin_logged', 'true');
+                        renderAdminDashboard();
+                    } else {
+                        errDiv.innerText = "Invalid Admin ID or Password. Please verify credentials.";
+                        errDiv.classList.remove('hidden');
+                    }
                 } else {
-                    errDiv.innerText = "Invalid Admin ID or Password. Please verify credentials.";
-                    errDiv.classList.remove('hidden');
+                    // Fallback setup if document hasn't been initialized in Firestore yet
+                    if (idInput === "DMADMIN" && passInput === "29102007") {
+                        localStorage.setItem('hs_admin_logged', 'true');
+                        renderAdminDashboard();
+                    } else {
+                        errDiv.innerText = "Invalid Admin ID or Password. Please verify credentials.";
+                        errDiv.classList.remove('hidden');
+                    }
                 }
             } catch (err) {
-                console.error("Authentication encryption error:", err);
-                errDiv.innerText = "An error occurred during authentication verification.";
+                console.error("Backend authentication error:", err);
+                errDiv.innerText = "Failed to connect to backend database. Please check your connection.";
                 errDiv.classList.remove('hidden');
+            } finally {
+                submitBtn.innerText = "Access Dashboard";
+                submitBtn.disabled = false;
             }
         };
 
