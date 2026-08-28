@@ -127,13 +127,14 @@
                             <tr class="border-b border-gold/20 text-xs uppercase tracking-widest text-neutral-500">
                                 <th class="py-3 px-4">Title</th>
                                 <th class="py-3 px-4">Status</th>
+                                <th class="py-3 px-4">Payment Link</th>
                                 <th class="py-3 px-4">Upload Date & Time</th>
                                 <th class="py-3 px-4 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody id="admin-books-table-body">
                             <tr>
-                                <td colspan="4" class="py-6 text-center text-neutral-400">Loading catalog items...</td>
+                                <td colspan="5" class="py-6 text-center text-neutral-400">Loading catalog items...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -286,6 +287,7 @@
 
                 feedback.className = "mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm";
                 feedback.innerText = `E-book "${title}" uploaded successfully and published to the live platform!`;
+                feedback.classList.add('hidden'); // Fix typo to ensure hidden works or remove class
                 feedback.classList.remove('hidden');
 
                 e.target.reset();
@@ -323,14 +325,13 @@
 
                 const adminBooksTable = document.getElementById('admin-books-table-body');
                 if (booksSnap.empty) {
-                    adminBooksTable.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-neutral-400">No e-books currently published.</td></tr>`;
+                    adminBooksTable.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-neutral-400">No e-books currently published.</td></tr>`;
                 } else {
                     adminBooksTable.innerHTML = '';
                     booksSnap.forEach((bookDoc) => {
                         const b = bookDoc.data();
                         const bId = bookDoc.id;
                         
-                        // Format ISO Date & Time to readable local string format
                         let formattedDate = 'N/A';
                         if (b.createdAt) {
                             const dateObj = new Date(b.createdAt);
@@ -344,10 +345,13 @@
                             });
                         }
 
+                        let linkDisplay = b.paymentUrl ? `<a href="${b.paymentUrl.startsWith('http') ? b.paymentUrl : 'https://' + b.paymentUrl}" target="_blank" class="text-darkgold underline truncate block max-w-xs">${b.paymentUrl}</a>` : 'N/A';
+
                         adminBooksTable.innerHTML += `
                             <tr class="border-b border-gold/10 hover:bg-pearl/60 transition">
                                 <td class="py-3 px-4 font-medium text-neutral-900">${b.title}</td>
                                 <td class="py-3 px-4 text-neutral-600">${b.status}</td>
+                                <td class="py-3 px-4 font-mono text-xs">${linkDisplay}</td>
                                 <td class="py-3 px-4 text-neutral-500 font-mono text-xs">${formattedDate}</td>
                                 <td class="py-3 px-4 text-center">
                                     <button onclick="deleteBook('${bId}', '${b.title}')" class="bg-red-50 border border-red-300 text-red-600 px-3 py-1 text-xs uppercase tracking-wider hover:bg-red-600 hover:text-white transition">Delete</button>
