@@ -21,7 +21,6 @@
 </head>
 <body class="bg-pearl text-neutral-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Admin Header -->
     <header class="bg-white border-b border-gold/20 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3">
@@ -37,10 +36,8 @@
         </div>
     </header>
 
-    <!-- Main Admin Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-grow w-full">
         
-        <!-- Login Card -->
         <div id="admin-login-card" class="max-w-md mx-auto bg-white border border-gold/30 p-8 shadow-sm">
             <h2 class="text-2xl font-serif text-darkgold mb-2 text-center">Admin Portal</h2>
             <p class="text-xs text-neutral-500 uppercase tracking-widest text-center mb-6">Backend Secured Access</p>
@@ -62,10 +59,8 @@
             </form>
         </div>
 
-        <!-- Dashboard View -->
         <div id="admin-dashboard-view" class="hidden space-y-12">
             
-            <!-- Statistics Header Bar -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div class="bg-white border border-gold/30 p-6 shadow-sm flex items-center justify-between">
                     <div>
@@ -83,7 +78,6 @@
                 </div>
             </div>
 
-            <!-- Upload E-Book Section -->
             <div class="bg-white border border-gold/30 p-8 shadow-sm">
                 <h2 class="text-2xl font-serif text-darkgold mb-6">Upload New E-Book</h2>
                 
@@ -125,7 +119,6 @@
                 </form>
             </div>
 
-            <!-- Manage / Delete Catalog E-Books Section -->
             <div class="bg-white border border-gold/30 p-8 shadow-sm">
                 <h2 class="text-2xl font-serif text-darkgold mb-6">Manage & Delete Catalog Items</h2>
                 <div class="overflow-x-auto">
@@ -134,7 +127,7 @@
                             <tr class="border-b border-gold/20 text-xs uppercase tracking-widest text-neutral-500">
                                 <th class="py-3 px-4">Title</th>
                                 <th class="py-3 px-4">Status</th>
-                                <th class="py-3 px-4">Payment Link</th>
+                                <th class="py-3 px-4">Upload Date & Time</th>
                                 <th class="py-3 px-4 text-center">Action</th>
                             </tr>
                         </thead>
@@ -147,7 +140,6 @@
                 </div>
             </div>
 
-            <!-- User Accounts & Buy Now Clicks Monitoring Section -->
             <div class="bg-white border border-gold/30 p-8 shadow-sm">
                 <h2 class="text-2xl font-serif text-darkgold mb-6">User Accounts & Activity Tracker</h2>
                 <div class="overflow-x-auto">
@@ -173,12 +165,10 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="bg-white border-t border-gold/20 py-8 text-center text-neutral-500 text-sm mt-20">
         <p>&copy; 2026 Heaven Stories India. All rights reserved. Admin Dashboard.</p>
     </footer>
 
-    <!-- Firebase & Secured Admin Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -313,7 +303,6 @@
             }
         };
 
-        // Delete E-Book Function
         window.deleteBook = async function(bookId, bookTitle) {
             if (confirm(`Are you sure you want to delete "${bookTitle}" from the website catalog?`)) {
                 try {
@@ -332,7 +321,6 @@
                 const booksSnap = await getDocs(collection(db, "books"));
                 document.getElementById('stat-total-books').innerText = booksSnap.size;
 
-                // Render Admin Books Table with Delete Button
                 const adminBooksTable = document.getElementById('admin-books-table-body');
                 if (booksSnap.empty) {
                     adminBooksTable.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-neutral-400">No e-books currently published.</td></tr>`;
@@ -341,11 +329,26 @@
                     booksSnap.forEach((bookDoc) => {
                         const b = bookDoc.data();
                         const bId = bookDoc.id;
+                        
+                        // Format ISO Date & Time to readable local string format
+                        let formattedDate = 'N/A';
+                        if (b.createdAt) {
+                            const dateObj = new Date(b.createdAt);
+                            formattedDate = isNaN(dateObj.getTime()) ? b.createdAt : dateObj.toLocaleString('en-IN', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            });
+                        }
+
                         adminBooksTable.innerHTML += `
                             <tr class="border-b border-gold/10 hover:bg-pearl/60 transition">
                                 <td class="py-3 px-4 font-medium text-neutral-900">${b.title}</td>
                                 <td class="py-3 px-4 text-neutral-600">${b.status}</td>
-                                <td class="py-3 px-4 font-mono text-xs text-neutral-500 truncate max-w-xs">${b.paymentUrl}</td>
+                                <td class="py-3 px-4 text-neutral-500 font-mono text-xs">${formattedDate}</td>
                                 <td class="py-3 px-4 text-center">
                                     <button onclick="deleteBook('${bId}', '${b.title}')" class="bg-red-50 border border-red-300 text-red-600 px-3 py-1 text-xs uppercase tracking-wider hover:bg-red-600 hover:text-white transition">Delete</button>
                                 </td>
