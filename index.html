@@ -21,7 +21,6 @@
 </head>
 <body class="bg-pearl text-neutral-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Navigation -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gold/20 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <a href="index.html" class="text-xl sm:text-2xl font-serif tracking-wider text-darkgold">HEAVEN STORIES</a>
@@ -49,7 +48,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="relative bg-gradient-to-b from-white to-pearl py-16 sm:py-24 border-b border-gold/10 px-4">
         <div class="max-w-5xl mx-auto text-center">
             <h1 class="text-3xl sm:text-5xl md:text-6xl font-serif text-neutral-900 mb-6 leading-tight">
@@ -64,7 +62,6 @@
         </div>
     </section>
 
-    <!-- Catalog Section -->
     <main id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex-grow w-full">
         <h2 class="text-2xl sm:text-3xl font-serif text-center mb-12 text-neutral-900">Curated E-Books Collection</h2>
         <div id="book-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -74,7 +71,6 @@
         </div>
     </main>
 
-    <!-- Auth Modal -->
     <div id="auth-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md border border-gold/30 p-8 relative shadow-2xl">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-800 text-xl">&times;</button>
@@ -109,12 +105,10 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-white border-t border-gold/20 py-8 text-center text-neutral-500 text-sm mt-20">
         <p>&copy; 2026 Heaven Stories India. All rights reserved.</p>
     </footer>
 
-    <!-- Firebase & App Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -159,6 +153,27 @@
                         stockBadge = `<span class="bg-amber-50 text-darkgold border border-gold/40 text-xs uppercase px-2.5 py-1 tracking-wider font-medium">Stocks Left: ${book.stockCount || 0}</span>`;
                     }
 
+                    // Price & Discount Calculations
+                    let priceDisplay = '';
+                    if (book.pricingType === 'Free') {
+                        priceDisplay = `<span class="text-darkgold font-serif font-bold tracking-wide uppercase text-sm bg-amber-50 px-3 py-1 border border-gold/30">Free E-Book</span>`;
+                    } else {
+                        const originalPrice = parseFloat(book.price) || 0;
+                        const discount = parseFloat(book.discount) || 0;
+                        if (discount > 0) {
+                            const discountedPrice = originalPrice - (originalPrice * discount / 100);
+                            priceDisplay = `
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-neutral-400 line-through text-sm">₹${originalPrice.toFixed(2)}</span>
+                                    <span class="text-darkgold font-semibold text-lg">₹${discountedPrice.toFixed(2)}</span>
+                                    <span class="bg-emerald-50 text-emerald-700 text-[10px] px-2 py-0.5 border border-emerald-200 font-medium">${discount}% OFF</span>
+                                </div>
+                            `;
+                        } else {
+                            priceDisplay = `<span class="text-darkgold font-semibold text-lg">₹${originalPrice.toFixed(2)}</span>`;
+                        }
+                    }
+
                     let imageElement = '';
                     if (book.imagePath && book.imagePath.trim() !== '') {
                         imageElement = `<img src="${book.imagePath}" alt="${book.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<span class=\'text-gold/60 font-serif text-center p-4\'>NO IMAGE AVAILABLE</span>';">`;
@@ -166,7 +181,6 @@
                         imageElement = `<span class="text-gold/60 font-serif text-center p-4">NO IMAGE AVAILABLE</span>`;
                     }
 
-                    // Ensure payment URL has correct protocol prefix if user typed domain without https://
                     let targetUrl = book.paymentUrl || '#';
                     if (targetUrl !== '#' && !targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
                         targetUrl = 'https://' + targetUrl;
@@ -184,10 +198,13 @@
                                 <h3 class="font-serif text-xl mb-1 text-neutral-900">${book.title}</h3>
                                 <p class="text-neutral-600 text-xs sm:text-sm mb-4 line-clamp-3 font-light">${book.description}</p>
                             </div>
-                            <div>
+                            <div class="space-y-4">
+                                <div class="pt-2 border-t border-gold/10 flex items-center justify-between">
+                                    ${priceDisplay}
+                                </div>
                                 ${isOutOfStock ? 
                                     `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs cursor-not-allowed">Out of Stock</button>` :
-                                    `<a href="${targetUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`
+                                    `<a href="${targetUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Get / Buy Now</a>`
                                 }
                             </div>
                         </div>
@@ -217,7 +234,7 @@
                                     <p class="text-neutral-600 text-sm mb-4">${book.description}</p>
                                 </div>
                                 <div>
-                                    ${isOutOfStock ? `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs">Out of Stock</button>` : `<a href="${fallbackUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Buy Now</a>`}
+                                    ${isOutOfStock ? `<button disabled class="w-full bg-neutral-200 text-neutral-400 py-3 uppercase tracking-wider text-xs">Out of Stock</button>` : `<a href="${fallbackUrl}" target="_blank" onclick="trackBuyClick('${bookId}')" class="block text-center w-full bg-darkgold text-white py-3 uppercase tracking-wider text-xs hover:bg-gold transition">Get / Buy Now</a>`}
                                 </div>
                             </div>
                         `;
