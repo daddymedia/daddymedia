@@ -3,41 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heaven Stories India | Divine E-Books</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Heaven Stories India | Luxury E-Books</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#D4AF37',
+                        darkgold: '#AA820A',
+                        pearl: '#FAFAFA'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-pearl text-neutral-800 font-sans antialiased">
 
-    <header class="navbar">
-        <div class="logo">Heaven Stories <span>India</span></div>
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#books">E-Books</a>
-            <a href="#about">About</a>
-            <a href="#" id="auth-btn">Sign In</a>
-        </nav>
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gold/20">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="text-2xl font-serif tracking-wider text-darkgold">HEAVEN STORIES</a>
+            <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-widest font-medium">
+                <a href="#catalog" class="hover:text-gold transition">Catalog</a>
+                <a href="#about" class="hover:text-gold transition">Our Philosophy</a>
+                <a href="#contact" class="hover:text-gold transition">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleCart()" class="relative border border-gold text-darkgold px-4 py-2 rounded-none hover:bg-gold hover:text-white transition text-sm tracking-wider uppercase">
+                    Cart (<span id="cart-count">0</span>)
+                </button>
+            </div>
+        </div>
     </header>
 
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Discover Timeless Wisdom</h1>
-            <p>Explore our exclusive collection of divine and inspiring e-books.</p>
-            <a href="#books" class="btn-gold">Explore E-Books</a>
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-b from-white to-pearl py-24 border-b border-gold/10">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-serif text-neutral-900 mb-6 leading-tight">
+                Timeless Tales, <span class="text-darkgold italic">Digitally Bound</span>
+            </h1>
+            <p class="text-neutral-600 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light">
+                Discover an exclusive curated collection of digital literature celebrating heritage, fiction, and spiritual journeys.
+            </p>
+            <a href="#catalog" class="inline-block bg-darkgold text-white px-8 py-4 uppercase tracking-widest text-sm hover:bg-gold transition shadow-sm">
+                Explore Catalog
+            </a>
         </div>
     </section>
 
-    <section id="books" class="books-section">
-        <h2>Our Divine Collection</h2>
-        <div class="book-grid" id="book-container">
-            <p class="loading-text">Loading sacred stories...</p>
+    <!-- Catalog Section -->
+    <main id="catalog" class="max-w-7xl mx-auto px-6 py-20">
+        <h2 class="text-3xl font-serif text-center mb-16 text-neutral-900">Curated E-Books</h2>
+        <div id="book-grid" class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <!-- Dynamic Books Loaded via JS / Firestore -->
+            <div class="bg-white border border-gold/20 p-6 flex flex-col justify-between shadow-sm">
+                <div>
+                    <div class="h-64 bg-pearl border border-gold/10 mb-6 flex items-center justify-center text-gold/60 font-serif">
+                        [Book Cover]
+                    </div>
+                    <h3 class="font-serif text-xl mb-2">The Golden Horizon</h3>
+                    <p class="text-neutral-500 text-sm mb-4">By A. R. Sharma</p>
+                    <p class="text-darkgold font-semibold mb-6">₹499.00</p>
+                </div>
+                <button onclick="addToCart('The Golden Horizon', 499)" class="w-full border border-darkgold text-darkgold py-3 uppercase tracking-wider text-xs hover:bg-darkgold hover:text-white transition">
+                    Add to Cart
+                </button>
+            </div>
         </div>
-    </section>
+    </main>
 
-    <footer>
-        <p>&copy; 2026 Heaven Stories India. All Rights Reserved.</p>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gold/20 py-12 text-center text-neutral-500 text-sm">
+        <p>&copy; 2026 Heaven Stories India. All rights reserved.</p>
     </footer>
 
-    <script type="module" src="app.js"></script>
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "heaven-stories-india",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadBooks() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "books"));
+                const grid = document.getElementById('book-grid');
+                if(!querySnapshot.empty) {
+                    grid.innerHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const book = doc.data();
+                        grid.innerHTML += `
+                            <div class="bg-white border border-gold/20 p-6 flex flex-col justify-between shadow-sm">
+                                <div>
+                                    <div class="h-64 bg-pearl border border-gold/10 mb-6 flex items-center justify-center text-gold/60 font-serif">
+                                        <img src="${book.coverUrl || ''}" alt="${book.title}" class="h-full object-cover"/>
+                                    </div>
+                                    <h3 class="font-serif text-xl mb-2">${book.title}</h3>
+                                    <p class="text-neutral-500 text-sm mb-4">By ${book.author}</p>
+                                    <p class="text-darkgold font-semibold mb-6">₹${book.price}</p>
+                                </div>
+                                <button onclick="addToCart('${book.title}', ${book.price})" class="w-full border border-darkgold text-darkgold py-3 uppercase tracking-wider text-xs hover:bg-darkgold hover:text-white transition">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                console.error("Error loading books from Firestore: ", e);
+            }
+        }
+
+        // Uncomment when Firestore credentials are added
+        // loadBooks();
+    </script>
+
+    <script>
+        let cartCount = 0;
+        function addToCart(title, price) {
+            cartCount++;
+            document.getElementById('cart-count').innerText = cartCount;
+            alert(`"${title}" added to your cart.`);
+        }
+        function toggleCart() {
+            alert(`You have ${cartCount} item(s) in your cart.`);
+        }
+    </script>
 </body>
 </html>
