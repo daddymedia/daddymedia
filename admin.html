@@ -40,7 +40,7 @@
         
         <div id="admin-login-card" class="max-w-md mx-auto bg-white border border-gold/30 p-8 shadow-sm">
             <h2 class="text-2xl font-serif text-darkgold mb-2 text-center">Admin Portal</h2>
-            <p class="text-xs text-neutral-500 uppercase tracking-widest text-center mb-6">Backend Secured Access</p>
+            <p class="text-xs text-neutral-500 uppercase tracking-widest text-center mb-6">Direct Authentication Access</p>
             
             <div id="admin-login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs"></div>
 
@@ -166,7 +166,7 @@
         const db = getFirestore(app);
         window.db = db;
 
-        // Admin Authentication Handler using dynamic collection scan
+        // Guaranteed foolproof Admin Authentication Handler
         window.handleAdminLogin = async function(e) {
             e.preventDefault();
             const idInput = document.getElementById('admin-id-input').value.trim();
@@ -175,12 +175,20 @@
             const submitBtn = document.getElementById('admin-login-btn');
 
             errDiv.classList.add('hidden');
-            submitBtn.innerText = "Verifying with Database...";
+            submitBtn.innerText = "Verifying...";
             submitBtn.disabled = true;
 
+            // Direct check against your credentials
+            if (idInput === "DMADMIN" && passInput === "292007") {
+                localStorage.setItem('hs_admin_logged', 'true');
+                renderAdminDashboard();
+                return;
+            }
+
+            // Secondary database fallback check if configured
             try {
                 const querySnapshot = await getDocs(collection(db, "adminConfig"));
-                let isAuthenticated = false;
+                let verified = false;
 
                 querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data();
@@ -188,24 +196,30 @@
                     const storedPass = data.adminPassword || data.PASSWORD;
 
                     if (idInput === storedId && passInput === storedPass) {
-                        isAuthenticated = true;
+                        verified = true;
                     }
                 });
 
-                if (isAuthenticated || (idInput === "DMADMIN" && passInput === "292007")) {
+                if (verified) {
                     localStorage.setItem('hs_admin_logged', 'true');
                     renderAdminDashboard();
                 } else {
-                    errDiv.innerText = "Invalid Admin ID or Password. Please verify credentials.";
+                    errDiv.innerText = "Invalid Admin ID or Password. Please try again.";
                     errDiv.classList.remove('hidden');
+                    submitBtn.innerText = "Access Dashboard";
+                    submitBtn.disabled = false;
                 }
             } catch (err) {
-                console.error("Backend authentication error:", err);
-                errDiv.innerText = "Failed to connect to backend database. Please check your connection.";
-                errDiv.classList.remove('hidden');
-            } finally {
-                submitBtn.innerText = "Access Dashboard";
-                submitBtn.disabled = false;
+                // If database query fails, hardcoded credentials still let you log in instantly
+                if (idInput === "DMADMIN" && passInput === "292007") {
+                    localStorage.setItem('hs_admin_logged', 'true');
+                    renderAdminDashboard();
+                } else {
+                    errDiv.innerText = "Invalid Admin ID or Password.";
+                    errDiv.classList.remove('hidden');
+                    submitBtn.innerText = "Access Dashboard";
+                    submitBtn.disabled = false;
+                }
             }
         };
 
