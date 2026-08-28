@@ -166,7 +166,7 @@
         const db = getFirestore(app);
         window.db = db;
 
-        // Admin Authentication Handler querying Firestore backend for credentials verification
+        // Backend Database Authentication Check against Firestore 'adminConfig/credentials'
         window.handleAdminLogin = async function(e) {
             e.preventDefault();
             const idInput = document.getElementById('admin-id-input').value.trim();
@@ -179,14 +179,12 @@
             submitBtn.disabled = true;
 
             try {
-                // Fetch credentials document from Firestore backend collection 'adminConfig' -> document 'credentials'
                 const adminDocRef = doc(db, "adminConfig", "credentials");
                 const adminDocSnap = await getDoc(adminDocRef);
 
                 if (adminDocSnap.exists()) {
                     const serverData = adminDocSnap.data();
                     
-                    // Verify credentials securely on the backend data check
                     if (idInput === serverData.adminId && passInput === serverData.adminPassword) {
                         localStorage.setItem('hs_admin_logged', 'true');
                         renderAdminDashboard();
@@ -195,8 +193,7 @@
                         errDiv.classList.remove('hidden');
                     }
                 } else {
-                    // Fallback setup if document hasn't been initialized in Firestore yet
-                    if (idInput === "DMADMIN" && passInput === "29102007") {
+                    if (idInput === "DMADMIN" && passInput === "292007") {
                         localStorage.setItem('hs_admin_logged', 'true');
                         renderAdminDashboard();
                     } else {
@@ -237,7 +234,6 @@
             }
         };
 
-        // Handle Book Upload via Admin Panel
         window.handleBookUpload = async function(e) {
             e.preventDefault();
             const title = document.getElementById('book-title').value.trim();
@@ -278,7 +274,6 @@
             }
         };
 
-        // Load Admin Analytics & User Table
         async function loadAdminStatsAndData() {
             try {
                 const booksSnap = await getDocs(collection(db, "books"));
@@ -310,7 +305,6 @@
             }
         }
 
-        // Auto Check Admin Persistence Session
         window.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('hs_admin_logged') === 'true') {
                 renderAdminDashboard();
