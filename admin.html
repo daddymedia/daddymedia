@@ -21,6 +21,7 @@
 </head>
 <body class="bg-pearl text-neutral-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
+    <!-- Admin Header -->
     <header class="bg-white border-b border-gold/20 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3">
@@ -36,8 +37,10 @@
         </div>
     </header>
 
+    <!-- Main Admin Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-grow w-full">
         
+        <!-- Login Card -->
         <div id="admin-login-card" class="max-w-md mx-auto bg-white border border-gold/30 p-8 shadow-sm">
             <h2 class="text-2xl font-serif text-darkgold mb-2 text-center">Admin Portal</h2>
             <p class="text-xs text-neutral-500 uppercase tracking-widest text-center mb-6">Backend Secured Access</p>
@@ -59,8 +62,10 @@
             </form>
         </div>
 
+        <!-- Dashboard View -->
         <div id="admin-dashboard-view" class="hidden space-y-12">
             
+            <!-- Statistics Header Bar -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div class="bg-white border border-gold/30 p-6 shadow-sm flex items-center justify-between">
                     <div>
@@ -78,6 +83,7 @@
                 </div>
             </div>
 
+            <!-- Upload E-Book Section -->
             <div class="bg-white border border-gold/30 p-8 shadow-sm">
                 <h2 class="text-2xl font-serif text-darkgold mb-6">Upload New E-Book</h2>
                 
@@ -119,6 +125,7 @@
                 </form>
             </div>
 
+            <!-- User Accounts & Buy Now Clicks Monitoring Section -->
             <div class="bg-white border border-gold/30 p-8 shadow-sm">
                 <h2 class="text-2xl font-serif text-darkgold mb-6">User Accounts & Activity Tracker</h2>
                 <div class="overflow-x-auto">
@@ -144,10 +151,12 @@
 
     </main>
 
+    <!-- Footer -->
     <footer class="bg-white border-t border-gold/20 py-8 text-center text-neutral-500 text-sm mt-20">
         <p>&copy; 2026 Heaven Stories India. All rights reserved. Admin Dashboard.</p>
     </footer>
 
+    <!-- Firebase & Backend-Protected Admin Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -166,7 +175,7 @@
         const db = getFirestore(app);
         window.db = db;
 
-        // Backend Database Authentication Check against Firestore 'adminConfig/credentials'
+        // Admin Authentication Handler querying your exact Firestore document structure
         window.handleAdminLogin = async function(e) {
             e.preventDefault();
             const idInput = document.getElementById('admin-id-input').value.trim();
@@ -179,13 +188,15 @@
             submitBtn.disabled = true;
 
             try {
-                const adminDocRef = doc(db, "adminConfig", "credentials");
+                // Fetching your exact document ID: "ADMIN ID & PASSWORD"
+                const adminDocRef = doc(db, "adminConfig", "ADMIN ID & PASSWORD");
                 const adminDocSnap = await getDoc(adminDocRef);
 
                 if (adminDocSnap.exists()) {
                     const serverData = adminDocSnap.data();
                     
-                    if (idInput === serverData.adminId && passInput === serverData.adminPassword) {
+                    // Matching your exact field names: ID and PASSWORD
+                    if (idInput === serverData.ID && passInput === serverData.PASSWORD) {
                         localStorage.setItem('hs_admin_logged', 'true');
                         renderAdminDashboard();
                     } else {
@@ -193,7 +204,7 @@
                         errDiv.classList.remove('hidden');
                     }
                 } else {
-                    if (idInput === "DMADMIN" && passInput === "292007") {
+                    if (idInput === "DMADMIN" && passInput === "29102007") {
                         localStorage.setItem('hs_admin_logged', 'true');
                         renderAdminDashboard();
                     } else {
